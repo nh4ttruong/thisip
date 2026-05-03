@@ -4,7 +4,7 @@
   <img src="images/icon-128.png" alt="This IP Icon" width="128" />
 </p>
 
-A minimal, efficient, and modern Chrome Extension that instantly displays the IP address of the current website you're visiting. Built with zero external dependencies, and an eye for clean UI.
+A minimal, efficient, and modern Browser Extension that instantly displays the IP address of the current website you're visiting. Built with zero external dependencies, and an eye for clean UI.
 
 ## Features
 
