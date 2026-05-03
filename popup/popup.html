@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>This IP</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <div class="popup">
+        <div class="header">
+            <div class="header-left">
+                <span class="logo">⬡</span>
+                <h1 class="title">This IP</h1>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="toggle-input" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="ip-card" id="ip-card">
+            <div class="ip-value" id="ip-value">Resolving...</div>
+            <span class="ip-tag" id="ip-tag"></span>
+        </div>
+        <div class="footer">
+            <div class="hostname" id="hostname">—</div>
+            <div class="footer-actions">
+                <button class="icon-btn" id="settings-btn" title="Settings">⚙</button>
+                <button class="icon-btn" id="refresh-btn" title="Refresh">↻</button>
+            </div>
+        </div>
+        <div class="settings" id="settings-panel">
+            <label class="checkbox-row">
+                <input type="checkbox" id="badge-icon" checked>
+                <span class="checkbox-label">Show icon on badge</span>
+            </label>
+            <label class="checkbox-row">
+                <input type="checkbox" id="badge-tag" checked>
+                <span class="checkbox-label">Show IP tag on badge</span>
+            </label>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

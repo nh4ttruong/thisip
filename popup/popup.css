@@ -1,0 +1,200 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 240px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  background: #0f0f14;
+  color: #e4e4e7;
+}
+
+.popup { padding: 10px; }
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo {
+  font-size: 18px;
+  color: #6ee7b7;
+}
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+/* ─── Toggle ────────────────────────── */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  cursor: pointer;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: #27272a;
+  transition: background 0.2s;
+}
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 3px;
+  top: 3px;
+  border-radius: 50%;
+  background: #71717a;
+  transition: transform 0.2s, background 0.2s;
+}
+.toggle input:checked + .toggle-slider {
+  background: rgba(110, 231, 183, 0.2);
+}
+.toggle input:checked + .toggle-slider::after {
+  transform: translateX(16px);
+  background: #6ee7b7;
+}
+
+/* ─── IP Card ───────────────────────── */
+.ip-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.ip-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.ip-card:active {
+  background: rgba(255, 255, 255, 0.06);
+}
+.ip-card.copied {
+  border-color: rgba(110, 231, 183, 0.3);
+}
+.ip-value {
+  font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fafafa;
+  letter-spacing: 0.2px;
+  word-break: break-all;
+  flex: 1;
+}
+.ip-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgba(110, 231, 183, 0.12);
+  color: #6ee7b7;
+  flex-shrink: 0;
+}
+.ip-tag.ipv6 {
+  background: rgba(147, 130, 255, 0.12);
+  color: #a78bfa;
+}
+.ip-tag:empty { display: none; }
+.ip-card.unavailable .ip-value {
+  color: #52525b;
+  font-style: italic;
+}
+
+/* Settings */
+.settings {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0 0;
+  margin-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.settings.open {
+  display: flex;
+}
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.checkbox-row input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #6ee7b7;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.checkbox-label {
+  font-size: 11px;
+  color: #a1a1aa;
+}
+.checkbox-row:hover .checkbox-label {
+  color: #e4e4e7;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.hostname {
+  font-size: 11px;
+  color: #71717a;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.footer-actions {
+  display: flex;
+  gap: 4px;
+}
+.icon-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: #71717a;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 3px 6px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.icon-btn:hover {
+  color: #e4e4e7;
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+}
+.icon-btn.active {
+  color: #6ee7b7;
+  border-color: rgba(110, 231, 183, 0.25);
+}
+.icon-btn.spinning {
+  animation: spin 0.6s ease;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
