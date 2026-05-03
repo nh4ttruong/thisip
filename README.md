@@ -17,13 +17,13 @@ A minimal, efficient, and modern Browser Extension that instantly displays the I
 
 ## Supported Browsers
 
-| Browser         | Supported  | Notes                                                           |
-| :-------------- | :--------: | :-------------------------------------------------------------- |
-| Google Chrome   |   ✅ Yes   | Fully supported (Manifest V3)                                   |
-| Microsoft Edge  |   ✅ Yes   | Fully supported (Chromium-based)                                |
-| Brave           |   ✅ Yes   | Fully supported (Chromium-based)                                |
-| Mozilla Firefox | ⚠️ Partial | Requires minor `manifest.json` tweaks for Firefox compatibility |
-| Safari          |   ❌ No    | Requires conversion to a Safari Web Extension                   |
+|                                          Browser                                           | Supported  |
+| :----------------------------------------------------------------------------------------: | :--------: |
+|   <img src="docs/images/chrome_128x128.png" alt="Chrome" width="32" /></br>Google Chrome   |     ✅     |
+|    <img src="docs/images/edge_128x128.png" alt="Edge" width="32" /></br>Microsoft Edge     |     ✅     |
+|        <img src="docs/images/brave_128x128.png" alt="Brave" width="32" /></br>Brave        |     ✅     |
+| <img src="docs/images/firefox_128x128.png" alt="Firefox" width="32" /></br>Mozilla Firefox | ⚠️ Partial |
+|      <img src="docs/images/safari_128x128.png" alt="Safari" width="32" /></br>Safari       |     ❌     |
 
 ## Installation
 
