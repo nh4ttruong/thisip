@@ -47,7 +47,7 @@ Since this extension is not yet published to the Chrome Web Store, you can insta
 This project uses raw HTML, CSS, and JavaScript. No build tools (like Webpack or Vite) are required, making it incredibly easy to tweak and test.
 
 1. Make your changes to the CSS or JS files.
-2. Go to `chrome://extensions/`.
+2. Go to `chrome://extensions/` or `edge://extensions`.
 3. Click the **Refresh** icon on the "This IP" extension card to reload your changes.
 
 ## License
