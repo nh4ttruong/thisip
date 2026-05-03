@@ -1,13 +1,20 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
   width: 240px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
   background: #0f0f14;
   color: #e4e4e7;
 }
 
-.popup { padding: 10px; }
+.popup {
+  padding: 10px;
+}
 
 .header {
   display: flex;
@@ -30,7 +37,7 @@ body {
   letter-spacing: -0.3px;
 }
 
-/* ─── Toggle ────────────────────────── */
+/* Toggle */
 .toggle {
   position: relative;
   display: inline-block;
@@ -38,7 +45,11 @@ body {
   height: 20px;
   cursor: pointer;
 }
-.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
 .toggle-slider {
   position: absolute;
   inset: 0;
@@ -47,7 +58,7 @@ body {
   transition: background 0.2s;
 }
 .toggle-slider::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 14px;
   height: 14px;
@@ -55,7 +66,9 @@ body {
   top: 3px;
   border-radius: 50%;
   background: #71717a;
-  transition: transform 0.2s, background 0.2s;
+  transition:
+    transform 0.2s,
+    background 0.2s;
 }
 .toggle input:checked + .toggle-slider {
   background: rgba(110, 231, 183, 0.2);
@@ -65,7 +78,7 @@ body {
   background: #6ee7b7;
 }
 
-/* ─── IP Card ───────────────────────── */
+/* IP Card */
 .ip-card {
   display: flex;
   align-items: center;
@@ -89,7 +102,7 @@ body {
   border-color: rgba(110, 231, 183, 0.3);
 }
 .ip-value {
-  font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+  font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
   font-size: 13px;
   font-weight: 500;
   color: #fafafa;
@@ -112,7 +125,9 @@ body {
   background: rgba(147, 130, 255, 0.12);
   color: #a78bfa;
 }
-.ip-tag:empty { display: none; }
+.ip-tag:empty {
+  display: none;
+}
 .ip-card.unavailable .ip-value {
   color: #52525b;
   font-style: italic;
@@ -195,6 +210,10 @@ body {
   animation: spin 0.6s ease;
 }
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

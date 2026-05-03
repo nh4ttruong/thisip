@@ -12,16 +12,24 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
   cursor: pointer;
   user-select: none;
-  font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Cascadia Code', monospace;
+  font-family:
+    "SF Mono", "Fira Code", "JetBrains Mono", "Cascadia Code", monospace;
   font-size: 11px;
   line-height: 1;
   color: rgba(255, 255, 255, 0.85);
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.3s ease, transform 0.3s ease, bottom 0.25s ease, left 0.25s ease, right 0.25s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    bottom 0.25s ease,
+    left 0.25s ease,
+    right 0.25s ease;
   pointer-events: none;
 }
 
@@ -34,7 +42,9 @@
 #thisip-badge:hover {
   background: rgba(25, 25, 35, 0.92);
   border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 #thisip-badge:active {
@@ -84,4 +94,3 @@
   color: #6ee7b7;
   flex-shrink: 0;
 }
-

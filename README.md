@@ -17,13 +17,13 @@ A minimal, efficient, and modern Chrome Extension that instantly displays the IP
 
 ## Supported Browsers
 
-| Browser | Supported | Notes |
-| :--- | :---: | :--- |
-| Google Chrome | ✅ Yes | Fully supported (Manifest V3) |
-| Microsoft Edge | ✅ Yes | Fully supported (Chromium-based) |
-| Brave | ✅ Yes | Fully supported (Chromium-based) |
+| Browser         | Supported  | Notes                                                           |
+| :-------------- | :--------: | :-------------------------------------------------------------- |
+| Google Chrome   |   ✅ Yes   | Fully supported (Manifest V3)                                   |
+| Microsoft Edge  |   ✅ Yes   | Fully supported (Chromium-based)                                |
+| Brave           |   ✅ Yes   | Fully supported (Chromium-based)                                |
 | Mozilla Firefox | ⚠️ Partial | Requires minor `manifest.json` tweaks for Firefox compatibility |
-| Safari | ❌ No | Requires conversion to a Safari Web Extension |
+| Safari          |   ❌ No    | Requires conversion to a Safari Web Extension                   |
 
 ## Installation
 

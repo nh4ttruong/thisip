@@ -1,37 +1,43 @@
 {
-  "name": "This IP",
-  "description": "Instantly see the IP address of any website you visit",
-  "version": "1.0.0",
-  "manifest_version": 3,
-  "icons": {
-    "16": "images/icon-16.png",
-    "48": "images/icon-48.png",
-    "128": "images/icon-128.png"
-  },
-  "action": {
-    "default_popup": "popup/popup.html",
-    "default_icon": {
-      "16": "images/icon-16.png",
-      "48": "images/icon-48.png"
-    }
-  },
-  "background": {
-    "service_worker": "scripts/background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["scripts/content.js"],
-      "css": ["scripts/content.css"],
-      "run_at": "document_idle"
-    }
-  ],
-  "permissions": [
-    "activeTab",
-    "storage",
-    "alarms"
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ]
+    "name": "This IP",
+    "description": "Instantly see the IP address of any website you visit",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "icons": {
+        "16": "images/icon-16.png",
+        "48": "images/icon-48.png",
+        "128": "images/icon-128.png"
+    },
+    "action": {
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "images/icon-16.png",
+            "48": "images/icon-48.png"
+        }
+    },
+    "background": {
+        "service_worker": "scripts/background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "scripts/content.js"
+            ],
+            "css": [
+                "scripts/content.css"
+            ],
+            "run_at": "document_idle"
+        }
+    ],
+    "permissions": [
+        "activeTab",
+        "storage",
+        "alarms"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ]
 }
