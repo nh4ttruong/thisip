@@ -1,5 +1,6 @@
 /**
- * This IP
+ * This IP - Content Script
+ * Injects and manages the floating IP badge on web pages.
  */
 
 (() => {
@@ -10,12 +11,22 @@
   let position = "bottom-right";
   let showIcon = true;
   let showTag = true;
+  let lightTheme = false;
+  let hoverDelay = 1.5;
+  let hoverTimer = 0.5;
+  let badgeOpacity = 100;
 
   // Load display preferences
-  chrome.storage.local.get(["badgeIcon", "badgeTag"], (result) => {
-    showIcon = result.badgeIcon !== false;
-    showTag = result.badgeTag !== false;
-  });
+  chrome.storage.local.get(
+    ["badgeIcon", "badgeTag", "lightTheme", "hoverDelay", "badgeOpacity"],
+    (result) => {
+      showIcon = result.badgeIcon !== false;
+      showTag = result.badgeTag !== false;
+      lightTheme = result.lightTheme === true;
+      hoverDelay = result.hoverDelay ?? 1.5;
+      badgeOpacity = result.badgeOpacity ?? 100;
+    },
+  );
 
   // Create badge element
   function createBadge() {
@@ -29,8 +40,10 @@
 
     document.documentElement.appendChild(badge);
     badge.classList.add(position);
+    if (lightTheme) badge.classList.add("light-theme");
+    applyOpacity();
 
-    // Click handler
+    // Click handler — copy only, no position toggle
     badge.addEventListener("click", handleBadgeClick);
     badge.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
@@ -38,10 +51,18 @@
         handleBadgeClick();
       }
     });
+
+    // Hover handler — auto-switch position after delay
+    badge.addEventListener("mouseenter", handleBadgeHoverStart);
+    badge.addEventListener("mouseleave", handleBadgeHoverEnd);
+
+    // Fullscreen change — hide/show badge
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
   }
 
   function handleBadgeClick() {
-    // Copy IP to clipboard
+    // Copy IP to clipboard only — no position toggle
     const ip = currentData?.ipv4 || currentData?.ipv6;
     if (ip) {
       navigator.clipboard.writeText(ip).catch(() => {
@@ -49,10 +70,47 @@
       });
     }
 
-    // Toggle position
+    // Cancel any pending hover switch so click doesn't trigger it
+    clearHoverTimer();
+  }
+
+  function handleBadgeHoverStart() {
+    if (hoverDelay === 0) {
+      // Instant dodge
+      togglePosition();
+      return;
+    }
+    hoverTimer = setTimeout(() => {
+      togglePosition();
+      hoverTimer = null;
+    }, hoverDelay * 1000);
+  }
+
+  function handleBadgeHoverEnd() {
+    clearHoverTimer();
+  }
+
+  function clearHoverTimer() {
+    if (hoverTimer) {
+      clearTimeout(hoverTimer);
+      hoverTimer = null;
+    }
+  }
+
+  function togglePosition() {
+    if (!badge) return;
     badge.classList.remove(position);
     position = position === "bottom-right" ? "bottom-left" : "bottom-right";
     badge.classList.add(position);
+  }
+
+  function handleFullscreenChange() {
+    if (!badge) return;
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      badge.classList.remove("visible");
+    } else if (currentData) {
+      badge.classList.add("visible");
+    }
   }
 
   function fallbackCopy(text) {
@@ -101,12 +159,35 @@
     badge.textContent = "";
     badge.appendChild(content);
 
+    // Don't show if in fullscreen
+    if (document.fullscreenElement || document.webkitFullscreenElement) return;
+
     badge.classList.add("visible");
   }
 
   function hideBadge() {
     if (badge) {
       badge.classList.remove("visible");
+    }
+  }
+
+  function applyTheme(isLight) {
+    lightTheme = isLight;
+    if (badge) {
+      badge.classList.toggle("light-theme", isLight);
+      applyOpacity();
+    }
+  }
+
+  function applyOpacity() {
+    if (!badge) return;
+    const alpha = badgeOpacity / 100;
+    if (lightTheme) {
+      badge.style.setProperty("--badge-bg-alpha", alpha);
+      badge.style.background = `rgba(255, 255, 255, ${0.88 * alpha})`;
+    } else {
+      badge.style.setProperty("--badge-bg-alpha", alpha);
+      badge.style.background = `rgba(15, 15, 20, ${0.82 * alpha})`;
     }
   }
 
@@ -129,6 +210,12 @@
     if (message.type === "UPDATE_BADGE_DISPLAY") {
       if (message.badgeIcon !== undefined) showIcon = message.badgeIcon;
       if (message.badgeTag !== undefined) showTag = message.badgeTag;
+      if (message.lightTheme !== undefined) applyTheme(message.lightTheme);
+      if (message.hoverDelay !== undefined) hoverDelay = message.hoverDelay;
+      if (message.badgeOpacity !== undefined) {
+        badgeOpacity = message.badgeOpacity;
+        applyOpacity();
+      }
       if (currentData) updateBadge(currentData);
       sendResponse({ received: true });
     }

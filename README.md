@@ -30,11 +30,11 @@ A minimal, efficient, and modern Browser Extension that instantly displays the I
 Since this extension is not yet published to the Chrome Web Store, you can install it manually in Developer Mode:
 
 1. Clone or download this repository to your local machine.
-2. Open Google Chrome and navigate to `chrome://extensions/`.
+2. Open browser's extensions management page (e.g., `chrome://extensions/`, `edge://extensions/`, etc).
 3. Enable **Developer mode** using the toggle switch in the top right corner.
 4. Click the **Load unpacked** button.
 5. Select the `siteip` folder containing the extension files.
-6. The "This IP" extension is now installed and active!
+6. The **"This IP"** extension is now installed and active!
 
 ## How It Works
 

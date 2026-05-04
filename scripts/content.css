@@ -1,4 +1,4 @@
-/* Floating Badge Styles */
+/* Floating Badge Styles - Dark Theme (default) */
 
 #thisip-badge {
   position: fixed;
@@ -12,9 +12,7 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 2px 10px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   user-select: none;
   font-family:
@@ -42,9 +40,7 @@
 #thisip-badge:hover {
   background: rgba(25, 25, 35, 0.92);
   border-color: rgba(255, 255, 255, 0.12);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 #thisip-badge:active {
@@ -61,6 +57,39 @@
   bottom: 1px;
   left: 6px;
   right: auto;
+}
+
+/* Light Theme */
+
+#thisip-badge.light-theme {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+#thisip-badge.light-theme:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+#thisip-badge.light-theme .thisip-icon {
+  color: #059669;
+}
+
+#thisip-badge.light-theme .thisip-tag {
+  background: rgba(5, 150, 105, 0.12);
+  color: #059669;
+}
+
+/* Hide in fullscreen */
+
+:fullscreen #thisip-badge,
+:-webkit-full-screen #thisip-badge,
+:-moz-full-screen #thisip-badge,
+:-ms-fullscreen #thisip-badge {
+  display: none !important;
 }
 
 /* Content Layout */
