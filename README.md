@@ -8,12 +8,15 @@ A minimal, efficient, and modern Browser Extension that instantly displays the I
 
 ## Features
 
-- **Floating Badge:** Injects a subtle, glassmorphism badge in the corner of your browser tab showing the site's IP.
-- **Dual Stack Support:** Automatically resolves both IPv4 and IPv6 addresses.
-- **Quick Copy:** Click the floating badge to instantly copy the IP address to your clipboard and toggle its position between the bottom-right and bottom-left.
-- **Popup Dashboard:** Click the extension icon to see a detailed view of the current site's IPv4/IPv6, alongside a quick copy button and manual refresh.
-- **Customizable:** Use the popup settings to toggle the visibility of the hexagon icon or the IP tag (e.g., "IPv4") on the floating badge.
-- **Privacy First:** Only requires permissions for the active tab and safe storage. Uses DNS-over-HTTPS (DoH) via Google Public DNS as a reliable fallback for cross-platform IP resolution.
+- **Floating Badge** — A subtle glassmorphism badge appears on every page, showing the current site's IP address at a glance.
+- **Dual-Stack DNS** — Resolves both IPv4 and IPv6 addresses automatically.
+- **Click to Copy** — Click the badge to copy the IP to your clipboard instantly.
+- **Auto-Dodge** — The badge moves out of the way when you hover over it. Configurable delay (0–3 seconds).
+- **Adjustable Opacity** — Slide the badge from fully visible down to 20% transparent.
+- **Light & Dark Theme** — Toggle between light and dark badge themes from the popup.
+- **Fullscreen Aware** — The badge automatically hides when you go fullscreen.
+- **Popup Dashboard** — Click the extension icon for a detailed view with quick copy and manual refresh.
+- **Privacy First** — No analytics, no tracking, no external servers. Uses DNS-over-HTTPS (Google Public DNS) only for name resolution.
 
 ## Supported Browsers
 
