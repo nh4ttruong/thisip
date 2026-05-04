@@ -9,36 +9,105 @@
 
 <body>
     <div class="popup">
+        <!-- Header -->
         <div class="header">
-            <div class="header-left">
-                <span class="logo">⬡</span>
-                <h1 class="title">This IP</h1>
+            <div class="header-brand">
+                <span class="header-logo">⬡</span>
+                <h1 class="header-title">This IP</h1>
             </div>
-            <label class="toggle">
-                <input type="checkbox" id="toggle-input" checked>
-                <span class="toggle-slider"></span>
-            </label>
+            <div class="header-controls">
+                <button class="icon-btn" id="theme-btn" title="Toggle theme">
+                    <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                    <svg class="icon-sun hidden" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+                <button class="icon-btn" id="settings-btn" title="Settings">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                </button>
+                <button class="icon-btn" id="refresh-btn" title="Refresh">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10" />
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                    </svg>
+                </button>
+                <label class="toggle" title="Enable/disable badge">
+                    <input type="checkbox" id="toggle-input" checked>
+                    <span class="toggle-track"></span>
+                </label>
+            </div>
         </div>
+
+        <!-- IP Display -->
         <div class="ip-card" id="ip-card">
             <div class="ip-value" id="ip-value">Resolving...</div>
             <span class="ip-tag" id="ip-tag"></span>
         </div>
-        <div class="footer">
-            <div class="hostname" id="hostname">—</div>
-            <div class="footer-actions">
-                <button class="icon-btn" id="settings-btn" title="Settings">⚙</button>
-                <button class="icon-btn" id="refresh-btn" title="Refresh">↻</button>
+
+        <!-- Hostname -->
+        <div class="hostname" id="hostname">—</div>
+
+        <!-- Settings Panel -->
+        <div class="settings" id="settings-panel">
+            <div class="settings-section">
+                <div class="settings-label">Badge</div>
+                <div class="setting-row" title="Show hexagon icon on badge">
+                    <span class="setting-name">Show icon</span>
+                    <label class="switch">
+                        <input type="checkbox" id="badge-icon" checked>
+                        <span class="switch-track"></span>
+                    </label>
+                </div>
+                <div class="setting-row" title="Show IPv4/IPv6 label on badge">
+                    <span class="setting-name">Show IP tag</span>
+                    <label class="switch">
+                        <input type="checkbox" id="badge-tag" checked>
+                        <span class="switch-track"></span>
+                    </label>
+                </div>
+                <div class="setting-row" title="Adjust badge background transparency">
+                    <span class="setting-name">Opacity</span>
+                    <div class="setting-range">
+                        <input type="range" id="badge-opacity" min="20" max="100" step="5" value="100">
+                        <span class="setting-value" id="opacity-value">100%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-label">Behavior</div>
+                <div class="setting-row" title="Badge moves aside after hovering this long">
+                    <span class="setting-name">Auto-dodge</span>
+                    <div class="setting-range">
+                        <input type="range" id="hover-delay" min="0" max="3" step="0.5" value="1.5">
+                        <span class="setting-value" id="dodge-value">1.5s</span>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="settings" id="settings-panel">
-            <label class="checkbox-row">
-                <input type="checkbox" id="badge-icon" checked>
-                <span class="checkbox-label">Show icon on badge</span>
-            </label>
-            <label class="checkbox-row">
-                <input type="checkbox" id="badge-tag" checked>
-                <span class="checkbox-label">Show IP tag on badge</span>
-            </label>
+
+        <!-- Footer -->
+        <div class="popup-footer">
+            <span>This IP © 2026 by <a href="https://nh4ttruong.me" target="_blank"
+                    rel="noopener">@nh4ttruong</a></span>
+            <span class="popup-version" id="version"></span>
         </div>
     </div>
     <script src="popup.js"></script>
