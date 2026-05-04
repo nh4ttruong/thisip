@@ -8,15 +8,15 @@ A minimal, efficient, and modern Browser Extension that instantly displays the I
 
 ## Features
 
-- **Floating Badge** — A subtle glassmorphism badge appears on every page, showing the current site's IP address at a glance.
-- **Dual-Stack DNS** — Resolves both IPv4 and IPv6 addresses automatically.
-- **Click to Copy** — Click the badge to copy the IP to your clipboard instantly.
-- **Auto-Dodge** — The badge moves out of the way when you hover over it. Configurable delay (0–3 seconds).
-- **Adjustable Opacity** — Slide the badge from fully visible down to 20% transparent.
-- **Light & Dark Theme** — Toggle between light and dark badge themes from the popup.
-- **Fullscreen Aware** — The badge automatically hides when you go fullscreen.
-- **Popup Dashboard** — Click the extension icon for a detailed view with quick copy and manual refresh.
-- **Privacy First** — No analytics, no tracking, no external servers. Uses DNS-over-HTTPS (Google Public DNS) only for name resolution.
+- **Floating Badge** - A subtle glassmorphism badge appears on every page, showing the current site's IP address at a glance.
+- **Dual-Stack DNS** - Resolves both IPv4 and IPv6 addresses automatically.
+- **Click to Copy** - Click the badge to copy the IP to your clipboard instantly.
+- **Auto-Dodge** - The badge moves out of the way when you hover over it. Configurable delay (0–3 seconds).
+- **Adjustable Opacity** - Slide the badge from fully visible down to 20% transparent.
+- **Light & Dark Theme** - Toggle between light and dark badge themes from the popup.
+- **Fullscreen Aware** - The badge automatically hides when you go fullscreen.
+- **Popup Dashboard** - Click the extension icon for a detailed view with quick copy and manual refresh.
+- **Privacy First** - No analytics, no tracking, no external servers. Uses DNS-over-HTTPS (Google Public DNS) only for name resolution.
 
 ## Supported Browsers
 
