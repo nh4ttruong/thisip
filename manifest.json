@@ -1,7 +1,7 @@
 {
     "name": "This IP",
     "description": "Instantly see the IP address of any website you visit",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "manifest_version": 3,
     "icons": {
         "16": "images/icon-16.png",
