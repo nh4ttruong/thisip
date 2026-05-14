@@ -18,22 +18,24 @@ A minimal, efficient, and modern Browser Extension that instantly displays the I
 - **Popup Dashboard** - Click the extension icon for a detailed view with quick copy and manual refresh.
 - **Privacy First** - No analytics, no tracking, no external servers. Uses DNS-over-HTTPS (Google Public DNS) only for name resolution.
 
-## Supported Browsers
-
-|                                          Browser                                           | Supported  |
-| :----------------------------------------------------------------------------------------: | :--------: |
-|   <img src="docs/images/chrome_128x128.png" alt="Chrome" width="32" /></br>Google Chrome   |     ✅     |
-|    <img src="docs/images/edge_128x128.png" alt="Edge" width="32" /></br>Microsoft Edge     |     ✅     |
-|        <img src="docs/images/brave_128x128.png" alt="Brave" width="32" /></br>Brave        |     ✅     |
-| <img src="docs/images/firefox_128x128.png" alt="Firefox" width="32" /></br>Mozilla Firefox | ⚠️ Partial |
-|      <img src="docs/images/safari_128x128.png" alt="Safari" width="32" /></br>Safari       |     ❌     |
-
 ## Installation
 
-Since this extension is not yet published to the Chrome Web Store, you can install it manually in Developer Mode:
+### Browser Stores
+
+|                                          Browser                                           | Supported  |                                              Download                                              |
+| :----------------------------------------------------------------------------------------: | :--------: | :------------------------------------------------------------------------------------------------: |
+|   <img src="docs/images/chrome_128x128.png" alt="Chrome" width="32" /></br>Google Chrome   |     ✅     |                  [Download](https://github.com/nh4ttruong/thisip/releases/latest)                  |
+|    <img src="docs/images/edge_128x128.png" alt="Edge" width="32" /></br>Microsoft Edge     |     ✅     | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/opeggffopnceofagdhebmghglfnojfln) |
+|        <img src="docs/images/brave_128x128.png" alt="Brave" width="32" /></br>Brave        |     ✅     |                  [Download](https://github.com/nh4ttruong/thisip/releases/latest)                  |
+| <img src="docs/images/firefox_128x128.png" alt="Firefox" width="32" /></br>Mozilla Firefox | ⚠️ Partial |                  [Download](https://github.com/nh4ttruong/thisip/releases/latest)                  |
+|      <img src="docs/images/safari_128x128.png" alt="Safari" width="32" /></br>Safari       |     ❌     |                                                 -                                                  |
+
+### Manually
+
+Since this extension is not fully published to the extension stores, you can install it manually in **Developer Mode**:
 
 1. Clone or download this repository to your local machine.
-2. Open browser's extensions management page (e.g., `chrome://extensions/`, `edge://extensions/`, etc).
+2. Open browser's extension management page (e.g., `chrome://extensions/`, `edge://extensions/`, etc).
 3. Enable **Developer mode** using the toggle switch in the top right corner.
 4. Click the **Load unpacked** button.
 5. Select the `siteip` folder containing the extension files.
