@@ -669,6 +669,28 @@ a {
   padding: 80px 0;
 }
 
+/* Install */
+.install {
+  padding: 80px 0;
+}
+
+.install h2 {
+  text-align: center;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.install-sub {
+  text-align: center;
+  font-size: 16px;
+  color: var(--text-dim);
+  max-width: 480px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
 .browser-grid {
   display: flex;
   justify-content: center;
@@ -852,6 +874,285 @@ a {
   color: var(--text);
 }
 
+/* Browser detection notice */
+.install-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* Store cards grid */
+.store-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.store-card {
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.25s, background 0.25s;
+  position: relative;
+}
+
+.store-card:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-card-hover);
+}
+
+.store-card-highlighted {
+  border: 2px solid var(--accent) !important;
+  background: rgba(110, 231, 183, 0.04);
+  box-shadow: 0 0 0 4px rgba(110, 231, 183, 0.06);
+}
+
+.store-card-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid rgba(110, 231, 183, 0.2);
+  width: fit-content;
+  margin-bottom: 4px;
+}
+
+.store-card-icon {
+  display: flex;
+  align-items: center;
+}
+
+.store-card-icon img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.store-card-body {
+  flex: 1;
+}
+
+.store-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.store-card-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.store-card-footer {
+  margin-top: 8px;
+}
+
+/* Full-width button variant */
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Info alert */
+.install-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(110, 231, 183, 0.2);
+  color: var(--accent);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 36px;
+}
+
+.install-alert svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Accordion */
+.accordion-section {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.accordion-trigger:hover {
+  background: var(--bg-card);
+}
+
+.accordion-icon {
+  color: var(--text-dim);
+  flex-shrink: 0;
+  display: flex;
+}
+
+.accordion-label {
+  flex: 1;
+}
+
+.accordion-chevron {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  display: flex;
+  transition: transform 0.2s ease;
+}
+
+.accordion-trigger.open .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  border-top: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.01);
+  animation: accordionDown 0.2s ease-out;
+}
+
+@keyframes accordionDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.accordion-body {
+  padding: 20px 20px 24px;
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accordion-body p {
+  margin: 0;
+}
+
+.install-ol {
+  padding-left: 20px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.install-ol li {
+  line-height: 1.6;
+}
+
+.install-ol a,
+.accordion-body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.install-ol code,
+.accordion-body code {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.install-tip {
+  font-size: 13px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(167, 139, 250, 0.07);
+  border: 1px solid rgba(167, 139, 250, 0.15);
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.install-tip a {
+  color: var(--purple);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Tabs inside accordion */
+.tab-switcher {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   Responsive
+   ───────────────────────────────────────────────────────────── */
+
 /* Responsive */
 @media (max-width: 768px) {
   .features-grid {
@@ -897,6 +1198,10 @@ a {
   .browser-card {
     width: calc(50% - 8px);
     min-width: 130px;
+  }
+
+  .store-grid {
+    grid-template-columns: 1fr;
   }
 
   .footer-grid {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>This IP — Instantly see the IP address of any website</title>
+    <title>This IP — Instantly show the website's IP address with the floating badge</title>
     <meta name="description"
         content="A minimal, efficient Browser Extension that shows the IP address of every website you visit. IPv4 & IPv6 support, one-click copy, zero clutter.">
     <meta name="theme-color" content="#0f0f14">
@@ -50,8 +50,8 @@
                 IPv4 &amp; IPv6. One-click copy. Zero clutter.
             </p>
             <div class="hero-actions">
-                <a href="https://github.com/nh4ttruong/thisip/releases" class="btn btn-primary">
-                    Download Extension
+                <a href="#install" class="btn btn-primary">
+                    Install Extension
                 </a>
                 <a href="https://github.com/nh4ttruong/thisip" class="btn btn-ghost">
                     View on GitHub →
@@ -201,7 +201,8 @@
                 <div class="step">
                     <div class="step-number">1</div>
                     <h3>Install</h3>
-                    <p>Load the extension in Chrome via Developer Mode or download from releases.</p>
+                    <p>Get from the <a href="#install" style="color:var(--accent);">Edge Add-ons store</a> or load
+                        manually via Developer Mode — no account required.</p>
                 </div>
                 <div class="step-line"></div>
                 <div class="step">
@@ -225,32 +226,251 @@
             <h2>Works with your browser</h2>
             <div class="browser-grid">
                 <div class="browser-card">
-                    <img src="images/chrome_128x128.png" class="browser-logo">
+                    <img src="images/chrome_128x128.png" class="browser-logo" alt="Chrome">
                     <div class="browser-name">Chrome</div>
                     <div class="browser-status success">Fully Supported</div>
                 </div>
                 <div class="browser-card">
-                    <img src="images/edge_128x128.png" class="browser-logo">
+                    <img src="images/edge_128x128.png" class="browser-logo" alt="Edge">
                     <div class="browser-name">Edge</div>
                     <div class="browser-status success">Fully Supported</div>
                 </div>
                 <div class="browser-card">
-                    <img src="images/brave_128x128.png" class="browser-logo">
+                    <img src="images/brave_128x128.png" class="browser-logo" alt="Brave">
                     <div class="browser-name">Brave</div>
                     <div class="browser-status success">Fully Supported</div>
                 </div>
                 <div class="browser-card partial">
-                    <img src="images/firefox_128x128.png" class="browser-logo">
+                    <img src="images/firefox_128x128.png" class="browser-logo" alt="Firefox">
                     <div class="browser-name">Firefox</div>
                     <div class="browser-status warning">Partial Support</div>
                 </div>
                 <div class="browser-card unsupported">
-                    <img src="images/safari_128x128.png" class="browser-logo">
+                    <img src="images/safari_128x128.png" class="browser-logo" alt="Safari">
                     <div class="browser-name">Safari</div>
                     <div class="browser-status error">Not Supported</div>
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- Install -->
+    <section class="install" id="install">
+        <div class="container">
+            <h2>Install <span class="gradient-text">This IP</span></h2>
+            <p class="install-sub">Available on the Microsoft Edge Add-ons store or install manually on any Chromium
+                browser.</p>
+
+            <!-- Browser detection notice -->
+            <div class="install-notice" id="browser-notice" style="display:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span id="browser-notice-text"></span>
+            </div>
+
+            <!-- Store cards -->
+            <div class="store-grid">
+                <!-- Edge Add-ons (published) -->
+                <div class="store-card" id="card-edge">
+                    <div class="store-card-icon">
+                        <img src="images/edge_128x128.png" alt="Microsoft Edge" width="36" height="36">
+                    </div>
+                    <div class="store-card-body">
+                        <div class="store-card-title">Install for Edge</div>
+                        <div class="store-card-desc">Available on Microsoft Edge Add-ons</div>
+                    </div>
+                    <div class="store-card-footer">
+                        <a href="https://microsoftedge.microsoft.com/addons/detail/opeggffopnceofagdhebmghglfnojfln"
+                            rel="noopener noreferrer" target="_blank" class="btn btn-primary btn-block">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Install for Edge
+                        </a>
+                    </div>
+                </div>
+                <!-- GitHub Releases (Chrome / Brave) -->
+                <div class="store-card" id="card-github">
+                    <div class="store-card-icon">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            style="color:var(--text-dim)">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                        </svg>
+                    </div>
+                    <div class="store-card-body">
+                        <div class="store-card-title">Chrome &amp; Brave</div>
+                        <div class="store-card-desc">Download latest release from GitHub</div>
+                    </div>
+                    <div class="store-card-footer">
+                        <a href="https://github.com/nh4ttruong/thisip/releases/latest" rel="noopener noreferrer"
+                            target="_blank" class="btn btn-ghost btn-block">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Download Release
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion -->
+            <div class="accordion-section">
+                <!-- Manual install -->
+                <div class="accordion-item" id="acc-manual">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="acc-manual-content"
+                        id="acc-manual-btn" onclick="toggleAccordion('acc-manual')">
+                        <span class="accordion-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                            </svg>
+                        </span>
+                        <span class="accordion-label">Manual Installation (Developer Mode)</span>
+                        <span class="accordion-chevron">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content" id="acc-manual-content" role="region"
+                        aria-labelledby="acc-manual-btn" hidden>
+                        <div class="accordion-body">
+                            <ol class="install-ol">
+                                <li>Download the latest release from <a
+                                        href="https://github.com/nh4ttruong/thisip/releases/latest" target="_blank"
+                                        rel="noopener noreferrer">GitHub Releases</a> and unzip it.</li>
+                                <li>Open <code>chrome://extensions</code> (or <code>edge://extensions</code>).</li>
+                                <li>Enable <strong>Developer mode</strong> using the toggle in the top-right corner.
+                                </li>
+                                <li>Click <strong>Load unpacked</strong> and select the <code>siteip</code> folder.</li>
+                                <li>The <em>This IP</em> extension is now installed and active!</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pin -->
+                <div class="accordion-item" id="acc-pin">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="acc-pin-content"
+                        id="acc-pin-btn" onclick="toggleAccordion('acc-pin')">
+                        <span class="accordion-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="17" x2="12" y2="22" />
+                                <path d="M5 17H19V13L17 7H7L5 13Z" />
+                                <line x1="12" y1="7" x2="12" y2="3" />
+                            </svg>
+                        </span>
+                        <span class="accordion-label">Pin the Extension Icon</span>
+                        <span class="accordion-chevron">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content" id="acc-pin-content" role="region" aria-labelledby="acc-pin-btn"
+                        hidden>
+                        <div class="accordion-body">
+                            <p>The extension icon may be hidden in the extensions menu. To pin it:</p>
+                            <ol class="install-ol">
+                                <li>Click the <strong>puzzle-piece icon</strong> (🧩) in your browser toolbar.</li>
+                                <li>Find <strong>This IP</strong> in the list.</li>
+                                <li>Click the <strong>pin icon</strong> (📌) next to it.</li>
+                                <li>The ⬡ icon will now appear permanently in your toolbar.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <!-- Update -->
+                <div class="accordion-item" id="acc-update">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="acc-update-content"
+                        id="acc-update-btn" onclick="toggleAccordion('acc-update')">
+                        <span class="accordion-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="23 4 23 10 17 10" />
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                            </svg>
+                        </span>
+                        <span class="accordion-label">Updating the Extension</span>
+                        <span class="accordion-chevron">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content" id="acc-update-content" role="region"
+                        aria-labelledby="acc-update-btn" hidden>
+                        <div class="accordion-body">
+                            <p>For Edge Add-ons, updates apply automatically. To force a refresh on a manually-installed
+                                version:</p>
+                            <ol class="install-ol">
+                                <li>Download the new release from <a
+                                        href="https://github.com/nh4ttruong/thisip/releases" target="_blank"
+                                        rel="noopener noreferrer">GitHub Releases</a>.</li>
+                                <li>Open <code>chrome://extensions</code> or <code>edge://extensions</code>.</li>
+                                <li>Click the <strong>Refresh</strong> icon on the <em>This IP</em> card.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            /* Browser detection */
+            (function () {
+                var ua = navigator.userAgent;
+                var isEdge = /Edg\//.test(ua);
+                var isChrome = /Chrome\//.test(ua) && !isEdge;
+                var isBrave = navigator.brave !== undefined;
+                var notice = document.getElementById('browser-notice');
+                var noticeText = document.getElementById('browser-notice-text');
+                var cardEdge = document.getElementById('card-edge');
+                var cardGithub = document.getElementById('card-github');
+                if (isEdge) {
+                    notice.style.display = 'flex';
+                    noticeText.textContent = "We detected you're using Microsoft Edge — install directly from the store below.";
+                    cardEdge.classList.add('store-card-highlighted');
+                } else if (isChrome || isBrave) {
+                    notice.style.display = 'flex';
+                    noticeText.textContent = (isBrave ? "Brave" : "Chrome") + " users: download the latest release from GitHub and load it manually.";
+                    cardGithub.classList.add('store-card-highlighted');
+                }
+            })();
+            /* Accordion */
+            function toggleAccordion(id) {
+                var item = document.getElementById(id);
+                var btn = item.querySelector('.accordion-trigger');
+                var content = item.querySelector('.accordion-content');
+                var isOpen = btn.getAttribute('aria-expanded') === 'true';
+                document.querySelectorAll('.accordion-item').forEach(function (el) {
+                    el.querySelector('.accordion-trigger').setAttribute('aria-expanded', 'false');
+                    el.querySelector('.accordion-trigger').classList.remove('open');
+                    el.querySelector('.accordion-content').hidden = true;
+                });
+                if (!isOpen) {
+                    btn.setAttribute('aria-expanded', 'true');
+                    btn.classList.add('open');
+                    content.hidden = false;
+                }
+            }
+        </script>
     </section>
 
     <!-- CTA -->
@@ -259,8 +479,8 @@
             <h2>Ready to see every IP?</h2>
             <p>Open source. Free forever. Install in under a minute.</p>
             <div class="hero-actions">
-                <a href="https://github.com/nh4ttruong/thisip/releases" class="btn btn-primary">
-                    Download Now
+                <a href="#install" class="btn btn-primary">
+                    Install Now
                 </a>
                 <a href="https://github.com/nh4ttruong/thisip" class="btn btn-ghost">
                     Star on GitHub ⭐
@@ -279,12 +499,12 @@
                         <span class="footer-brand">This IP</span>
                     </div>
                     <p class="footer-desc">A minimal, open-source browser extension that instantly resolves and displays
-                        the IP address of any website you visit.</p>
+                        the IP address of any website you visit with the floating badge on your corner screen.</p>
                 </div>
                 <div class="footer-links-col">
                     <h3>Product</h3>
                     <ul>
-                        <li><a href="https://github.com/nh4ttruong/thisip/releases">Download</a></li>
+                        <li><a href="#install">Install</a></li>
                         <li><a href="#features">Features</a></li>
                         <li><a href="https://github.com/nh4ttruong/thisip/releases">Changelog</a></li>
                     </ul>
