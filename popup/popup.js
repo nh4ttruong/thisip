@@ -4,6 +4,36 @@
  * Manages the extension popup: IP display, clipboard copy,
  * theme toggle, settings persistence, and badge communication.
  */
+
+// Mock Chrome API for local UI development
+if (
+  typeof chrome === "undefined" ||
+  !chrome.runtime ||
+  !chrome.runtime.getManifest
+) {
+  window.chrome = {
+    runtime: {
+      getManifest: () => ({ version: "local-dev" }),
+      sendMessage: (msg, cb) => {
+        if ((msg.type === "GET_IP" || msg.type === "REFRESH_IP") && cb) {
+          cb({ ipv4: "127.0.0.1", ipv6: null, hostname: "localhost" });
+        }
+      },
+      lastError: null,
+    },
+    storage: {
+      local: {
+        get: async () => ({}),
+        set: async () => {},
+      },
+    },
+    tabs: {
+      query: async () => [{ url: "http://localhost/local-test", id: 999 }],
+      sendMessage: async () => {},
+    },
+  };
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   // DOM references (null-safe)
   const $ = (id) => document.getElementById(id);
@@ -146,9 +176,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (elements.ipTag) elements.ipTag.textContent = "";
     elements.ipCard?.classList.remove("unavailable", "copied");
 
-    chrome.runtime.sendMessage({ type: "REFRESH_IP", url: currentUrl }, (response) => {
-      if (!chrome.runtime.lastError && response) displayIP(response);
-    });
+    chrome.runtime.sendMessage(
+      { type: "REFRESH_IP", url: currentUrl },
+      (response) => {
+        if (!chrome.runtime.lastError && response) displayIP(response);
+      },
+    );
   });
 
   // Copy on card click
@@ -180,7 +213,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (ip) {
       elements.ipValue.textContent = ip;
       elements.ipTag.textContent = data.ipv4 ? "IPv4" : "IPv6";
-      elements.ipTag.className = "ip-tag" + (data.ipv6 && !data.ipv4 ? " ipv6" : "");
+      elements.ipTag.className =
+        "ip-tag" + (data.ipv6 && !data.ipv4 ? " ipv6" : "");
       elements.ipCard.classList.remove("unavailable");
     } else {
       elements.ipValue.textContent = "Unavailable";
@@ -194,6 +228,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const sunIcon = elements.themeBtn.querySelector(".icon-sun");
     moonIcon.classList.toggle("hidden", isLight);
     sunIcon.classList.toggle("hidden", !isLight);
+    document.body.classList.toggle("light-theme", isLight);
   }
 
   async function notifyBadge(settings) {
