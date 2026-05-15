@@ -74,6 +74,25 @@ chrome.tabs.onActivated.addListener(async ({ tabId }) => {
   }
 });
 
+// Capture actual IP from browser's network requests (solves local DNS)
+chrome.webRequest.onResponseStarted.addListener(
+  (details) => {
+    if (details.type === "main_frame" && details.ip) {
+      const hostname = getHostname(details.url);
+      if (hostname) {
+        const result = IP_CACHE.get(hostname) || {
+          ipv4: null,
+          ipv6: null,
+          hostname,
+        };
+        categorizeIP(details.ip, result);
+        IP_CACHE.set(hostname, result);
+      }
+    }
+  },
+  { urls: ["<all_urls>"] },
+);
+
 // Message handler
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "GET_IP") {
@@ -161,6 +180,21 @@ async function handleRefresh(url) {
 async function resolveIP(hostname) {
   const result = { ipv4: null, ipv6: null, hostname };
 
+  // Short-circuit if hostname is already an IP address or localhost
+  if (hostname === "localhost") {
+    result.ipv4 = "127.0.0.1";
+    result.ipv6 = "::1";
+    return result;
+  }
+  if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
+    result.ipv4 = hostname;
+    return result;
+  }
+  if (hostname.includes(":")) {
+    result.ipv6 = hostname.replace(/^\[|\]$/g, "");
+    return result;
+  }
+
   try {
     // Try chrome.dns API first
     if (chrome.dns && chrome.dns.resolve) {
@@ -185,29 +219,58 @@ async function resolveIP(hostname) {
     await resolveViaDOH(hostname, result, "A");
   }
 
+  // Use cached IP from webRequest if DNS resolution failed (e.g. local networks)
+  const cached = IP_CACHE.get(hostname);
+  if (cached) {
+    if (!result.ipv4 && cached.ipv4) result.ipv4 = cached.ipv4;
+    if (!result.ipv6 && cached.ipv6) result.ipv6 = cached.ipv6;
+  }
+
   return result;
 }
 
 async function resolveViaDOH(hostname, result, type) {
   const types = type ? [type] : ["A", "AAAA"];
+  const endpoints = [
+    {
+      url: (name, t) => `https://dns.google/resolve?name=${name}&type=${t}`,
+      headers: {},
+    },
+    {
+      url: (name, t) =>
+        `https://cloudflare-dns.com/dns-query?name=${name}&type=${t}`,
+      headers: { Accept: "application/dns-json" },
+    },
+  ];
 
   for (const t of types) {
-    try {
-      const resp = await fetch(
-        `https://dns.google/resolve?name=${encodeURIComponent(hostname)}&type=${t}`,
-        { signal: AbortSignal.timeout(3000) },
-      );
-      const data = await resp.json();
+    for (const endpoint of endpoints) {
+      try {
+        const resp = await fetch(
+          endpoint.url(encodeURIComponent(hostname), t),
+          {
+            headers: endpoint.headers,
+            signal: AbortSignal.timeout(3000),
+          },
+        );
 
-      if (data.Answer) {
-        for (const answer of data.Answer) {
-          if (answer.data) {
-            categorizeIP(answer.data, result);
+        if (!resp.ok) continue;
+
+        const data = await resp.json();
+
+        if (data.Answer) {
+          for (const answer of data.Answer) {
+            if (answer.data) {
+              categorizeIP(answer.data, result);
+            }
           }
         }
+
+        // If the request was successful, don't try the fallback provider for this record type
+        break;
+      } catch {
+        /* silent, try next provider */
       }
-    } catch {
-      /* silent */
     }
   }
 }

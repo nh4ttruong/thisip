@@ -425,3 +425,130 @@ body {
   font-family: "SF Mono", "Fira Code", monospace;
   color: #a1a1aa;
 }
+
+/* Light Theme Overrides */
+body.light-theme {
+  background: #ffffff;
+  color: #27272a;
+}
+
+body.light-theme .header-logo {
+  color: #059669;
+}
+
+body.light-theme .icon-btn {
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #71717a;
+}
+
+body.light-theme .icon-btn:hover {
+  color: #27272a;
+  border-color: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .icon-btn.active {
+  color: #059669;
+  border-color: rgba(5, 150, 105, 0.25);
+  background: rgba(5, 150, 105, 0.06);
+}
+
+body.light-theme .toggle-track,
+body.light-theme .switch-track,
+body.light-theme .setting-range input[type="range"],
+body.light-theme .setting-range input[type="range"]::-moz-range-track {
+  background: #e4e4e7;
+}
+
+body.light-theme .toggle-track::after,
+body.light-theme .switch-track::after {
+  background: #a1a1aa;
+}
+
+body.light-theme .toggle input:checked + .toggle-track,
+body.light-theme .switch input:checked + .switch-track {
+  background: rgba(5, 150, 105, 0.2);
+}
+
+body.light-theme .toggle input:checked + .toggle-track::after,
+body.light-theme .switch input:checked + .switch-track::after {
+  background: #059669;
+}
+
+body.light-theme .setting-range input[type="range"]::-webkit-slider-thumb {
+  background: #059669;
+  border-color: #ffffff;
+}
+
+body.light-theme .setting-range input[type="range"]::-moz-range-thumb {
+  background: #059669;
+  border-color: #ffffff;
+}
+
+body.light-theme .ip-card {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .ip-card:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+body.light-theme .ip-card:active {
+  background: rgba(0, 0, 0, 0.09);
+}
+
+body.light-theme .ip-card.copied {
+  border-color: rgba(5, 150, 105, 0.3);
+  background: rgba(5, 150, 105, 0.06);
+}
+
+body.light-theme .ip-value {
+  color: #18181b;
+}
+
+body.light-theme .ip-card.unavailable .ip-value {
+  color: #a1a1aa;
+}
+
+body.light-theme .ip-tag {
+  background: rgba(5, 150, 105, 0.12);
+  color: #059669;
+}
+
+body.light-theme .ip-tag.ipv6 {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+}
+
+body.light-theme .hostname,
+body.light-theme .settings-label,
+body.light-theme .setting-value {
+  color: #71717a;
+}
+
+body.light-theme .setting-name,
+body.light-theme .popup-footer,
+body.light-theme .popup-version,
+body.light-theme .popup-footer a {
+  color: #52525b;
+}
+
+body.light-theme .setting-row:hover .setting-name {
+  color: #18181b;
+}
+
+body.light-theme .setting-row:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-theme .settings,
+body.light-theme .settings-section + .settings-section,
+body.light-theme .popup-footer {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .popup-footer a:hover {
+  color: #059669;
+}
