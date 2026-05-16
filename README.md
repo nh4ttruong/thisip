@@ -41,20 +41,6 @@ Since this extension is not fully published to the extension stores, you can ins
 5. Select the `thisip` folder containing the extension files.
 6. The **"This IP"** extension is now installed and active!
 
-## How It Works
-
-- **Background Service Worker (`scripts/background.js`):** Listens for tab updates and active tab changes. It uses the `chrome.dns` API (where available) and falls back to a public DNS-over-HTTPS API to resolve the hostname of the active tab. Responses are cached to ensure speed and efficiency.
-- **Content Script (`scripts/content.js`):** Injected into every page to render the floating badge. It listens for messages from the service worker to update the displayed IP address.
-- **Popup UI (`popup/popup.html`):** A sleek, dark-themed dashboard built with vanilla HTML, CSS, and JS. It communicates directly with the background service worker to fetch the latest IP data and update user preferences.
-
-## Development
-
-This project uses raw HTML, CSS, and JavaScript. No build tools (like Webpack or Vite) are required, making it incredibly easy to tweak and test.
-
-1. Make your changes to the CSS or JS files.
-2. Go to `chrome://extensions/` or `edge://extensions`.
-3. Click the **Refresh** icon on the "This IP" extension card to reload your changes.
-
 ## License
 
 MIT License
