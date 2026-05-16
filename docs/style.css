@@ -1150,6 +1150,136 @@ a {
 
 
 /* ─────────────────────────────────────────────────────────────
+   Prose (Legal/Content Pages)
+   ───────────────────────────────────────────────────────────── */
+
+.prose {
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.prose h2 {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 56px 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  text-align: left;
+}
+
+.prose h2:first-child {
+  margin-top: 0;
+}
+
+.prose h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 32px 0 12px;
+  color: var(--text);
+}
+
+.prose p {
+  margin-bottom: 16px;
+}
+
+.prose ul,
+.prose ol {
+  margin-bottom: 16px;
+  padding-left: 20px;
+}
+
+.prose li {
+  margin-bottom: 8px;
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s;
+}
+
+.prose a:hover {
+  opacity: 0.8;
+}
+
+.prose code {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.prose blockquote {
+  padding: 20px 24px;
+  border-left: 3px solid var(--accent);
+  background: rgba(110, 231, 183, 0.04);
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 32px;
+}
+
+/* Data Tables */
+.table-wrap {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table td:first-child {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.data-table td {
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .data-table th,
+  .data-table td {
+    padding: 10px 12px;
+  }
+  .data-table td:first-child {
+    font-size: 11px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
    Responsive
    ───────────────────────────────────────────────────────────── */
 
