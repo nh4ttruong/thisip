@@ -38,7 +38,7 @@ Since this extension is not fully published to the extension stores, you can ins
 2. Open browser's extension management page (e.g., `chrome://extensions/`, `edge://extensions/`, etc).
 3. Enable **Developer mode** using the toggle switch in the top right corner.
 4. Click the **Load unpacked** button.
-5. Select the `siteip` folder containing the extension files.
+5. Select the `thisip` folder containing the extension files.
 6. The **"This IP"** extension is now installed and active!
 
 ## How It Works
