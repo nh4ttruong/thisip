@@ -37,6 +37,9 @@ body {
   display: flex;
   align-items: center;
   gap: 7px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .header-logo {

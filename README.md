@@ -41,6 +41,11 @@ Since this extension is not fully published to the extension stores, you can ins
 5. Select the `thisip` folder containing the extension files.
 6. The **"This IP"** extension is now installed and active!
 
+## Development
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for Edge and Firefox development,
+linting, packaging, and release ignore rules.
+
 ## License
 
 MIT License

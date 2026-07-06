@@ -1,7 +1,7 @@
 {
     "name": "This IP",
     "description": "Instantly see the IP address of any website you visit",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "manifest_version": 3,
     "icons": {
         "16": "images/icon-16.png",
@@ -16,6 +16,9 @@
         }
     },
     "background": {
+        "scripts": [
+            "scripts/background.js"
+        ],
         "service_worker": "scripts/background.js"
     },
     "content_scripts": [
@@ -40,5 +43,15 @@
     ],
     "host_permissions": [
         "<all_urls>"
-    ]
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "thisip@nh4ttruong.github.io",
+            "data_collection_permissions": {
+                "required": [
+                    "none"
+                ]
+            }
+        }
+    }
 }
