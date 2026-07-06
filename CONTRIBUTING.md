@@ -106,6 +106,93 @@ Before uploading a new store version, increase `version` in `manifest.json`.
 Store dashboards reject packages with a version that is not higher than the
 already-uploaded version.
 
+## CI/CD release pipeline
+
+GitHub Actions workflow `.github/workflows/release.yml` validates, packages,
+creates a GitHub release, and can submit updates to Firefox Add-ons and
+Microsoft Edge Add-ons.
+
+Official references:
+
+- Firefox `web-ext` signing:
+  <https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/#sign-and-submit-your-extension-for-publication>
+- Microsoft Edge Add-ons Update REST API:
+  <https://learn.microsoft.com/en-us/microsoft-edge/extensions/update/api/using-addons-api>
+
+The workflow runs in three modes:
+
+- Pull requests and pushes to `main`: lint and build only.
+- Tags named `vX.Y.Z`: lint, build, create/update a GitHub release, submit to
+  Firefox Add-ons, and submit to Microsoft Edge Add-ons.
+- Manual `workflow_dispatch`: lint/build, with checkboxes to publish Firefox,
+  publish Edge, and create/update the GitHub release.
+
+Before pushing a release tag, make sure the tag matches `manifest.json` exactly.
+For example, if the manifest version is `1.0.3`, the tag must be `v1.0.3`.
+
+```bash
+git tag v1.0.3
+git push origin v1.0.3
+```
+
+### GitHub repository secrets and variables
+
+Set these in GitHub repository settings before using store publishing.
+
+Firefox Add-ons secrets:
+
+- `AMO_JWT_ISSUER`: JWT issuer from AMO API credentials.
+- `AMO_JWT_SECRET`: JWT secret from AMO API credentials.
+
+Microsoft Edge Add-ons variable:
+
+- `EDGE_PRODUCT_ID`: Product ID GUID from the Edge Partner Center extension
+  overview page.
+
+Microsoft Edge Add-ons secrets:
+
+- `EDGE_CLIENT_ID`: Client ID from Partner Center Publish API.
+- `EDGE_API_KEY`: API key from Partner Center Publish API.
+
+### Firefox Add-ons publishing notes
+
+The workflow uses:
+
+```bash
+npx --yes web-ext sign -c web-ext.config.cjs \
+  --channel=listed \
+  --api-key="$AMO_JWT_ISSUER" \
+  --api-secret="$AMO_JWT_SECRET" \
+  --approval-timeout=0
+```
+
+`--approval-timeout=0` means CI submits the listed add-on update but does not
+wait for human or automated AMO approval. Check AMO after the workflow finishes
+to see review status.
+
+For a brand-new listed Firefox add-on, AMO may require listing metadata or
+manual setup before fully automated updates work. After the add-on exists and
+the manifest keeps a stable `browser_specific_settings.gecko.id`, tagged
+updates can be automated.
+
+### Microsoft Edge Add-ons publishing notes
+
+The workflow uses the Microsoft Edge Add-ons Update REST API v1.1. Edge requires
+the first submission to be created in Partner Center manually. After the
+extension exists in Partner Center and has a Product ID, CI can upload and
+publish update submissions.
+
+The Edge publish script is `.github/scripts/publish-edge-addons.mjs`. It:
+
+- Uploads the generated zip to the draft package endpoint.
+- Polls the package upload operation until it succeeds or fails.
+- Sends certification notes and starts the publish operation.
+- Polls the publish operation until it succeeds or fails.
+
+If Edge already has an in-review submission, the API can reject the publish step
+with `InProgressSubmission`. Wait for the current review to finish before
+retrying.
+
 ## Package ignore rules
 
 The shared `web-ext.config.cjs` excludes files that should not be shipped inside
@@ -115,6 +202,7 @@ browser extension packages:
   code.
 - `web-ext-artifacts` and `web-ext-artifacts/**`: generated build output.
 - `.git` and `.git/**`: repository metadata.
+- `.github` and `.github/**`: CI/CD workflows and publishing scripts.
 - `.gitignore`, `CONTRIBUTING.md`, and `web-ext.config.cjs`: contributor and
   tooling files.
 - `.DS_Store`: macOS metadata.
