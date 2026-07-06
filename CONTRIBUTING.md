@@ -17,8 +17,10 @@ source tree.
 - Keep the extension on the `chrome.*` WebExtension APIs unless a change has
   been verified in both Edge and Firefox.
 
-Do not remove the Firefox fallback or Gecko metadata just because Chromium
-prints an unknown-key warning.
+Release builds are browser-specific. Firefox packages keep the Firefox fallback
+and Gecko metadata. Edge packages are staged from the same source, but remove
+`background.scripts` and `browser_specific_settings` before zipping because the
+Edge store rejects those Firefox-only fields.
 
 ## Prerequisites
 
@@ -31,11 +33,20 @@ dependencies first.
 
 ## Local development in Edge
 
+Prepare an Edge-compatible source folder:
+
+```bash
+node .github/scripts/prepare-browser-package.mjs edge .extension-build/edge
+```
+
+Then load it in Edge:
+
 1. Open `edge://extensions`.
 2. Enable Developer mode.
 3. Click Load unpacked.
-4. Select the repository root, not a zip file.
-5. After changing source files, click Reload on the extension card.
+4. Select `.extension-build/edge`, not the repository root and not a zip file.
+5. After changing source files, run the prepare command again, then click Reload
+   on the extension card.
 
 Recommended Edge smoke test:
 
@@ -90,17 +101,31 @@ The `BACKGROUND_SERVICE_WORKER_IGNORED` warning is expected. Firefox ignores
 `background.service_worker` and uses `background.scripts` instead. Other errors
 or warnings should be fixed before submitting.
 
-## Packaging
-
-Build the uploadable extension package with:
+Check the staged Edge manifest before an Edge release:
 
 ```bash
-npx --yes web-ext build -c web-ext.config.cjs --overwrite-dest
+node .github/scripts/prepare-browser-package.mjs edge .extension-build/edge
+node -e "const m=require('./.extension-build/edge/manifest.json'); if (m.background?.scripts) throw new Error('Edge manifest must not contain background.scripts'); if (m.browser_specific_settings) throw new Error('Edge manifest must not contain browser_specific_settings');"
 ```
 
-The zip is written to `web-ext-artifacts/`. Upload that generated zip to the
-Firefox Add-ons Developer Hub or the Edge Partner Center. Do not zip the whole
-repository by hand.
+## Packaging
+
+Build browser-specific upload packages with:
+
+```bash
+rm -rf .extension-build web-ext-artifacts dist
+mkdir -p dist
+node .github/scripts/prepare-browser-package.mjs firefox .extension-build/firefox
+node .github/scripts/prepare-browser-package.mjs edge .extension-build/edge
+npx --yes web-ext build --source-dir .extension-build/firefox --artifacts-dir web-ext-artifacts/firefox --overwrite-dest
+npx --yes web-ext build --source-dir .extension-build/edge --artifacts-dir web-ext-artifacts/edge --overwrite-dest
+cp web-ext-artifacts/firefox/*.zip dist/thisip-firefox-$(node -p "require('./manifest.json').version").zip
+cp web-ext-artifacts/edge/*.zip dist/thisip-edge-$(node -p "require('./manifest.json').version").zip
+```
+
+Upload the Firefox zip to Firefox Add-ons and the Edge zip to the Edge Partner
+Center. Do not upload the Firefox zip to Edge, because Edge rejects
+`background.scripts`. Do not zip the whole repository by hand.
 
 Before uploading a new store version, increase `version` in `manifest.json`.
 Store dashboards reject packages with a version that is not higher than the
@@ -126,6 +151,11 @@ The workflow runs in three modes:
   Firefox Add-ons, and submit to Microsoft Edge Add-ons.
 - Manual `workflow_dispatch`: lint/build, with checkboxes to publish Firefox,
   publish Edge, and create/update the GitHub release.
+
+The GitHub release receives two zip assets:
+
+- `thisip-firefox-X.Y.Z.zip`
+- `thisip-edge-X.Y.Z.zip`
 
 Before pushing a release tag, make sure the tag matches `manifest.json` exactly.
 For example, if the manifest version is `1.0.3`, the tag must be `v1.0.3`.
@@ -201,6 +231,8 @@ browser extension packages:
 - `docs` and `docs/**`: marketing/privacy site files, not runtime extension
   code.
 - `web-ext-artifacts` and `web-ext-artifacts/**`: generated build output.
+- `.extension-build` and `.extension-build/**`: staged browser-specific source.
+- `dist` and `dist/**`: release zip output.
 - `.git` and `.git/**`: repository metadata.
 - `.github` and `.github/**`: CI/CD workflows and publishing scripts.
 - `.gitignore`, `CONTRIBUTING.md`, and `web-ext.config.cjs`: contributor and
