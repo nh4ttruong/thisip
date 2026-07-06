@@ -117,6 +117,7 @@ jobs:
     name: Publish to Firefox Add-ons
     needs: package
     runs-on: ubuntu-latest
+    environment: Extension
     if: |
       startsWith(github.ref, 'refs/tags/v') ||
       (github.event_name == 'workflow_dispatch' && inputs.publish_firefox)
@@ -149,6 +150,7 @@ jobs:
     name: Publish to Microsoft Edge Add-ons
     needs: package
     runs-on: ubuntu-latest
+    environment: Extension
     if: |
       startsWith(github.ref, 'refs/tags/v') ||
       (github.event_name == 'workflow_dispatch' && inputs.publish_edge)
