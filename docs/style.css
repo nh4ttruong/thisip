@@ -888,7 +888,7 @@ a {
 /* Store cards grid */
 .store-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 20px;
 }
@@ -934,6 +934,10 @@ a {
 .store-card-icon {
   display: flex;
   align-items: center;
+}
+
+.store-card-icon-stack {
+  gap: 8px;
 }
 
 .store-card-icon img {

@@ -22,13 +22,13 @@ A minimal browser extension that shows the IP address of every website you visit
 
 ### Browser Stores
 
-|                                          Browser                                           | Supported  |                                              Installation                                              |
-| :----------------------------------------------------------------------------------------: | :--------: | :------------------------------------------------------------------------------------------------: |
-|   <img src="docs/images/chrome_128x128.png" alt="Chrome" width="32" /></br>Google Chrome   |     ✅     |                  [Download](https://github.com/nh4ttruong/thisip/releases/latest)                  |
-|    <img src="docs/images/edge_128x128.png" alt="Edge" width="32" /></br>Microsoft Edge     |     ✅     | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/opeggffopnceofagdhebmghglfnojfln) |
-|        <img src="docs/images/brave_128x128.png" alt="Brave" width="32" /></br>Brave        |     ✅     |                  [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/opeggffopnceofagdhebmghglfnojfln) or [Download](https://github.com/nh4ttruong/thisip/releases/latest)                  |
-| <img src="docs/images/firefox_128x128.png" alt="Firefox" width="32" /></br>Mozilla Firefox |     ✅     |                  [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/this-ip/)                  |
-|      <img src="docs/images/safari_128x128.png" alt="Safari" width="32" /></br>Safari       |     ❌     |                                                 -                                                  |
+|                                          Browser                                           | Supported |                                                                              Installation                                                                              |
+| :----------------------------------------------------------------------------------------: | :-------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|   <img src="docs/images/chrome_128x128.png" alt="Chrome" width="32" /></br>Google Chrome   |     ✅     |                                                    [Download](https://github.com/nh4ttruong/thisip/releases/latest)                                                    |
+|    <img src="docs/images/edge_128x128.png" alt="Edge" width="32" /></br>Microsoft Edge     |     ✅     |                                   [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/opeggffopnceofagdhebmghglfnojfln)                                   |
+|        <img src="docs/images/brave_128x128.png" alt="Brave" width="32" /></br>Brave        |     ✅     | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/opeggffopnceofagdhebmghglfnojfln) or [Download](https://github.com/nh4ttruong/thisip/releases/latest) |
+| <img src="docs/images/firefox_128x128.png" alt="Firefox" width="32" /></br>Mozilla Firefox |     ✅     |                                               [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/this-ip/)                                               |
+|      <img src="docs/images/safari_128x128.png" alt="Safari" width="32" /></br>Safari       |     ❌     |                                                                                   -                                                                                    |
 
 ### Manually
 

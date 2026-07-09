@@ -201,8 +201,8 @@
                 <div class="step">
                     <div class="step-number">1</div>
                     <h3>Install</h3>
-                    <p>Get from the <a href="#install" style="color:var(--accent);">Edge Add-ons store</a> or load
-                        manually via Developer Mode — no account required.</p>
+                    <p>Get from the <a href="#install" style="color:var(--accent);">browser stores</a> or download the
+                        latest release from GitHub — no account required.</p>
                 </div>
                 <div class="step-line"></div>
                 <div class="step">
@@ -240,10 +240,10 @@
                     <div class="browser-name">Brave</div>
                     <div class="browser-status success">Fully Supported</div>
                 </div>
-                <div class="browser-card partial">
+                <div class="browser-card">
                     <img src="images/firefox_128x128.png" class="browser-logo" alt="Firefox">
                     <div class="browser-name">Firefox</div>
-                    <div class="browser-status warning">Partial Support</div>
+                    <div class="browser-status success">Fully Supported</div>
                 </div>
                 <div class="browser-card unsupported">
                     <img src="images/safari_128x128.png" class="browser-logo" alt="Safari">
@@ -258,8 +258,7 @@
     <section class="install" id="install">
         <div class="container">
             <h2>Install <span class="gradient-text">This IP</span></h2>
-            <p class="install-sub">Available on the Microsoft Edge Add-ons store or install manually on any Chromium
-                browser.</p>
+            <p class="install-sub">Available from Microsoft Edge Add-ons, Firefox Add-ons, and GitHub Releases.</p>
 
             <!-- Browser detection notice -->
             <div class="install-notice" id="browser-notice" style="display:none;">
@@ -276,11 +275,12 @@
             <div class="store-grid">
                 <!-- Edge Add-ons (published) -->
                 <div class="store-card" id="card-edge">
-                    <div class="store-card-icon">
+                    <div class="store-card-icon store-card-icon-stack">
                         <img src="images/edge_128x128.png" alt="Microsoft Edge" width="36" height="36">
+                        <img src="images/brave_128x128.png" alt="Brave" width="36" height="36">
                     </div>
                     <div class="store-card-body">
-                        <div class="store-card-title">Install for Edge</div>
+                        <div class="store-card-title">Install for Edge &amp; Brave</div>
                         <div class="store-card-desc">Available on Microsoft Edge Add-ons</div>
                     </div>
                     <div class="store-card-footer">
@@ -292,7 +292,29 @@
                                 <polyline points="7 10 12 15 17 10" />
                                 <line x1="12" y1="15" x2="12" y2="3" />
                             </svg>
-                            Install for Edge
+                            Install
+                        </a>
+                    </div>
+                </div>
+                <!-- Firefox Add-ons (published) -->
+                <div class="store-card" id="card-firefox">
+                    <div class="store-card-icon">
+                        <img src="images/firefox_128x128.png" alt="Firefox" width="36" height="36">
+                    </div>
+                    <div class="store-card-body">
+                        <div class="store-card-title">Install for Firefox</div>
+                        <div class="store-card-desc">Available on Firefox Add-ons</div>
+                    </div>
+                    <div class="store-card-footer">
+                        <a href="https://addons.mozilla.org/en-US/firefox/addon/this-ip/" rel="noopener noreferrer"
+                            target="_blank" class="btn btn-primary btn-block">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Install
                         </a>
                     </div>
                 </div>
@@ -307,7 +329,7 @@
                         </svg>
                     </div>
                     <div class="store-card-body">
-                        <div class="store-card-title">Chrome &amp; Brave</div>
+                        <div class="store-card-title">Chrome</div>
                         <div class="store-card-desc">Download latest release from GitHub</div>
                     </div>
                     <div class="store-card-footer">
@@ -353,10 +375,12 @@
                                 <li>Download the latest release from <a
                                         href="https://github.com/nh4ttruong/thisip/releases/latest" target="_blank"
                                         rel="noopener noreferrer">GitHub Releases</a> and unzip it.</li>
-                                <li>Open <code>chrome://extensions</code> (or <code>edge://extensions</code>).</li>
+                                <li>Open <code>chrome://extensions</code>, <code>edge://extensions</code>, or
+                                    <code>brave://extensions</code>.
+                                </li>
                                 <li>Enable <strong>Developer mode</strong> using the toggle in the top-right corner.
                                 </li>
-                                <li>Click <strong>Load unpacked</strong> and select the <code>siteip</code> folder.</li>
+                                <li>Click <strong>Load unpacked</strong> and select the <code>thisip</code> folder.</li>
                                 <li>The <em>This IP</em> extension is now installed and active!</li>
                             </ol>
                         </div>
@@ -417,13 +441,15 @@
                     <div class="accordion-content" id="acc-update-content" role="region"
                         aria-labelledby="acc-update-btn" hidden>
                         <div class="accordion-body">
-                            <p>For Edge Add-ons, updates apply automatically. To force a refresh on a manually-installed
-                                version:</p>
+                            <p>For store installs, updates apply automatically. To force a refresh on a
+                                manually-installed version:</p>
                             <ol class="install-ol">
                                 <li>Download the new release from <a
                                         href="https://github.com/nh4ttruong/thisip/releases" target="_blank"
                                         rel="noopener noreferrer">GitHub Releases</a>.</li>
-                                <li>Open <code>chrome://extensions</code> or <code>edge://extensions</code>.</li>
+                                <li>Open <code>chrome://extensions</code>, <code>edge://extensions</code>, or
+                                    <code>brave://extensions</code>.
+                                </li>
                                 <li>Click the <strong>Refresh</strong> icon on the <em>This IP</em> card.</li>
                             </ol>
                         </div>
@@ -436,21 +462,35 @@
             /* Browser detection */
             (function () {
                 var ua = navigator.userAgent;
-                var isEdge = /Edg\//.test(ua);
-                var isChrome = /Chrome\//.test(ua) && !isEdge;
-                var isBrave = navigator.brave !== undefined;
+                var isFirefox = typeof InstallTrigger !== 'undefined' || /Firefox\/|FxiOS\//.test(ua);
+                var isEdge = !isFirefox && /Edg\/|EdgA\/|EdgiOS\//.test(ua);
+                var isBrave = !isFirefox && !isEdge && navigator.brave !== undefined;
+                var isChrome = !isFirefox && !isEdge && !isBrave && /Chrome\/|CriOS\//.test(ua);
+                var isSafari = !isFirefox && !isEdge && !isBrave && !isChrome && /Safari\//.test(ua);
                 var notice = document.getElementById('browser-notice');
                 var noticeText = document.getElementById('browser-notice-text');
                 var cardEdge = document.getElementById('card-edge');
+                var cardFirefox = document.getElementById('card-firefox');
                 var cardGithub = document.getElementById('card-github');
                 if (isEdge) {
                     notice.style.display = 'flex';
-                    noticeText.textContent = "We detected you're using Microsoft Edge — install directly from the store below.";
+                    noticeText.textContent = "We detected you're using Microsoft Edge — install directly from Edge Add-ons below.";
                     cardEdge.classList.add('store-card-highlighted');
-                } else if (isChrome || isBrave) {
+                } else if (isBrave) {
                     notice.style.display = 'flex';
-                    noticeText.textContent = (isBrave ? "Brave" : "Chrome") + " users: download the latest release from GitHub and load it manually.";
+                    noticeText.textContent = "We detected you're using Brave — install from Edge Add-ons below or download the latest release from GitHub.";
+                    cardEdge.classList.add('store-card-highlighted');
+                } else if (isFirefox) {
+                    notice.style.display = 'flex';
+                    noticeText.textContent = "We detected you're using Firefox — install directly from Firefox Add-ons below.";
+                    cardFirefox.classList.add('store-card-highlighted');
+                } else if (isChrome) {
+                    notice.style.display = 'flex';
+                    noticeText.textContent = "Chrome users: download the latest release from GitHub and load it manually.";
                     cardGithub.classList.add('store-card-highlighted');
+                } else if (isSafari) {
+                    notice.style.display = 'flex';
+                    noticeText.textContent = "Safari is not supported yet.";
                 }
             })();
             /* Accordion */
