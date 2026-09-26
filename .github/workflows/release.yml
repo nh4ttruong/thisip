@@ -7,6 +7,12 @@ on:
       - main
     tags:
       - "v*"
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - 'LICENSE'
+      - '.github/**'
+      - 'images/**'
   workflow_dispatch:
     inputs:
       publish_firefox:
