@@ -140,16 +140,17 @@ async function handleRefresh(url) {
 }
 
 // Session storage outlives service-worker restarts and is dropped when the browser closes
-// ponytail: one entry per hostname until restart (10 MB quota), evict if that ever fills
-const cacheKey = (hostname) => `ip:${hostname}`;
-
+// Connection and DNS results use separate keys, so a DNS write can never replace a connection
+// ponytail: entries per hostname until restart (10 MB quota), evict if that ever fills
 async function getCached(hostname) {
-  const key = cacheKey(hostname);
-  return (await chrome.storage.session.get(key))[key];
+  const [conn, dns] = [`conn:${hostname}`, `dns:${hostname}`];
+  const stored = await chrome.storage.session.get([conn, dns]);
+  return stored[conn] ?? stored[dns];
 }
 
 function setCached(result) {
-  return chrome.storage.session.set({ [cacheKey(result.hostname)]: result });
+  const kind = result.connected ? "conn" : "dns";
+  return chrome.storage.session.set({ [`${kind}:${result.hostname}`]: result });
 }
 
 // Cached answer when there is one, a fresh lookup otherwise
@@ -182,13 +183,10 @@ async function resolveIP(hostname) {
   // No connection on record: ask public DNS-over-HTTPS
   await resolveViaDOH(hostname, result);
 
-  // Keep the earlier answer when DNS came back empty or a page load reported its connection meanwhile
-  const latest = await getCached(hostname);
-  const resolved = result.ipv4 || result.ipv6;
-  if (latest && (latest.connected || !resolved)) return latest;
+  if (result.ipv4 || result.ipv6) await setCached(result);
 
-  if (resolved) await setCached(result);
-  return result;
+  // Prefer a connection a page load reported meanwhile; an empty answer keeps the earlier one
+  return (await getCached(hostname)) ?? result;
 }
 
 async function resolveViaDOH(hostname, result) {

@@ -68,7 +68,8 @@
             <!-- 1. Data Collection -->
             <h2 id="information-collection">1. Information Collection and Use</h2>
             <p>
-                <strong>We do not collect or store any data, and nothing is ever sent to us.</strong> Specifically:
+                <strong>Nothing is ever sent to us: we run no servers and receive no data from the extension.</strong>
+                Specifically:
             </p>
             <ul>
                 <li>No browsing history is recorded.</li>
@@ -103,7 +104,8 @@
                         </tr>
                         <tr>
                             <td>storage</td>
-                            <td>To save your display preferences locally in your browser.</td>
+                            <td>To save your display preferences locally in your browser, and to keep resolved IP
+                                addresses in memory until the browser closes.</td>
                         </tr>
                         <tr>
                             <td>alarms</td>
@@ -125,8 +127,9 @@
             <h2 id="third-party">3. Third-Party Services (DNS Resolution)</h2>
             <p>
                 This IP normally takes the IP address from the connection your browser already made, which sends
-                nothing anywhere. When the browser does not report an address (for example, a page served from cache),
-                This IP looks the hostname up over DNS-over-HTTPS (DoH) via third-party providers:
+                nothing anywhere. When the browser does not report the site's address (for example, a page served from
+                cache, or Firefox connecting through a proxy), This IP looks the hostname up over DNS-over-HTTPS (DoH)
+                via third-party providers:
             </p>
             <ul>
                 <li>

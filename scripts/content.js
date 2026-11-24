@@ -26,6 +26,8 @@
   // Load preferences first so the first render already uses them
   chrome.storage.local.get(DEFAULTS, (stored) => {
     Object.assign(prefs, stored);
+    // Listening any earlier would let a pushed result render with default preferences
+    chrome.runtime.onMessage.addListener(handleMessage);
     if (prefs.enabled) requestIP();
   });
 
@@ -37,7 +39,12 @@
     }
     applyTheme();
     applyOpacity();
-    if (currentData) updateBadge(currentData);
+    if (currentData) {
+      updateBadge(currentData);
+    } else if (changes.enabled && prefs.enabled) {
+      // Loaded while disabled: nothing to show yet
+      requestIP();
+    }
   });
 
   systemLight.addEventListener("change", applyTheme);
@@ -194,8 +201,7 @@
     badge?.style.setProperty("--badge-bg-alpha", prefs.badgeOpacity / 100);
   }
 
-  // Message listener
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  function handleMessage(message, sender, sendResponse) {
     if (message.type === "IP_RESOLVED") {
       // A slow lookup can land after the tab moved to another site
       if (message.data?.hostname === window.location.hostname) {
@@ -203,7 +209,7 @@
       }
       sendResponse({ received: true });
     }
-  });
+  }
 
   // Initial request
   function requestIP() {

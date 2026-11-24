@@ -35,9 +35,9 @@ if (
   };
 }
 
-// Theme button cycles through these; `light: undefined` follows the system
+// Theme button cycles through these; `light: null` follows the system
 const THEMES = [
-  { light: undefined, icon: ".icon-system", title: "Theme: System" },
+  { light: null, icon: ".icon-system", title: "Theme: System" },
   { light: true, icon: ".icon-sun", title: "Theme: Light" },
   { light: false, icon: ".icon-moon", title: "Theme: Dark" },
 ];
@@ -51,15 +51,15 @@ systemLight.addEventListener("change", applyTheme);
 
 function readThemeMirror() {
   try {
-    return JSON.parse(localStorage.getItem(THEME_MIRROR)) ?? undefined;
+    return JSON.parse(localStorage.getItem(THEME_MIRROR));
   } catch {
-    return undefined;
+    return null;
   }
 }
 
 function writeThemeMirror() {
   try {
-    localStorage.setItem(THEME_MIRROR, JSON.stringify(lightTheme ?? null));
+    localStorage.setItem(THEME_MIRROR, JSON.stringify(lightTheme));
   } catch {
     /* the mirror only saves a repaint */
   }
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   elements.toggleInput.checked = stored.enabled !== false;
   elements.badgeIcon.checked = stored.badgeIcon !== false;
   elements.badgeTag.checked = stored.badgeTag !== false;
-  lightTheme = stored.lightTheme;
+  lightTheme = stored.lightTheme ?? null;
   applyTheme();
   writeThemeMirror();
 
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     lightTheme = THEMES[(index + 1) % THEMES.length].light;
     applyTheme();
     writeThemeMirror();
-    if (lightTheme === undefined) {
+    if (lightTheme === null) {
       chrome.storage.local.remove("lightTheme");
     } else {
       chrome.storage.local.set({ lightTheme });
