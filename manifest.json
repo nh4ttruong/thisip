@@ -49,7 +49,7 @@
             "id": "thisip@nh4ttruong.github.io",
             "data_collection_permissions": {
                 "required": [
-                    "none"
+                    "browsingActivity"
                 ]
             }
         }

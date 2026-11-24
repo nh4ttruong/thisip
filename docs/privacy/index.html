@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy — This IP Browser Extension</title>
     <meta name="description"
-        content="Privacy policy for the This IP browser extension. Learn about our zero-data collection practices and permissions.">
+        content="Privacy policy for the This IP browser extension. Learn what it sends, when, and why it needs each permission.">
     <meta name="theme-color" content="#0f0f14">
 
     <!-- Open Graph -->
     <meta property="og:title" content="Privacy Policy — This IP Browser Extension">
     <meta property="og:description"
-        content="This IP collects zero personal data. No analytics, no tracking, no accounts.">
+        content="No analytics, no tracking, no accounts. See exactly what This IP sends and when.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nh4ttruong.github.io/thisip/privacy/">
 
@@ -52,7 +52,7 @@
             <h1 class="hero-headline" style="font-size: clamp(2rem, 5vw, 2.5rem); margin-bottom: 12px;">
                 Privacy Policy
             </h1>
-            <p class="hero-note" style="margin-top: 0; font-size: 14px;">Last updated: May 16, 2026</p>
+            <p class="hero-note" style="margin-top: 0; font-size: 14px;">Last updated: November 24, 2026</p>
         </div>
     </section>
 
@@ -68,15 +68,19 @@
             <!-- 1. Data Collection -->
             <h2 id="information-collection">1. Information Collection and Use</h2>
             <p>
-                <strong>We do not collect, store, or transmit any personal data.</strong> Specifically:
+                <strong>We do not collect or store any data, and nothing is ever sent to us.</strong> Specifically:
             </p>
             <ul>
-                <li>No browsing history is recorded or transmitted.</li>
+                <li>No browsing history is recorded.</li>
                 <li>No personal information is collected.</li>
                 <li>No usage analytics or telemetry is gathered.</li>
                 <li>No cookies or tracking pixels are used.</li>
-                <li>No data is sold or shared with third parties.</li>
+                <li>No data is sold.</li>
             </ul>
+            <p>
+                The only data that can leave your browser is the hostname lookup described in
+                <a href="#third-party">section 3</a>.
+            </p>
 
             <!-- 2. Permissions -->
             <h2 id="permissions">2. Extension Permissions</h2>
@@ -107,7 +111,7 @@
                         </tr>
                         <tr>
                             <td>webRequest</td>
-                            <td>To capture IP addresses from network connections for local hostname resolution.</td>
+                            <td>To read the IP address your browser connected to when it loaded the page.</td>
                         </tr>
                         <tr>
                             <td>host_permissions</td>
@@ -120,8 +124,9 @@
             <!-- 3. DNS Resolution -->
             <h2 id="third-party">3. Third-Party Services (DNS Resolution)</h2>
             <p>
-                To resolve IP addresses when the browser's built-in APIs are unavailable, This IP uses DNS-over-HTTPS
-                (DoH) via third-party providers:
+                This IP normally takes the IP address from the connection your browser already made, which sends
+                nothing anywhere. When the browser does not report an address (for example, a page served from cache),
+                This IP looks the hostname up over DNS-over-HTTPS (DoH) via third-party providers:
             </p>
             <ul>
                 <li>
@@ -130,7 +135,7 @@
                         rel="noopener noreferrer">Privacy Policy</a>)
                 </li>
                 <li>
-                    <strong>Cloudflare DNS</strong>
+                    <strong>Cloudflare DNS</strong>, used only when Google Public DNS does not answer
                     (<a href="https://developers.cloudflare.com/1.1.1.1/privacy/public-dns-resolver/" target="_blank"
                         rel="noopener noreferrer">Privacy Policy</a>)
                 </li>

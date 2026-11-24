@@ -9,14 +9,14 @@ A minimal browser extension that shows the IP address of every website you visit
 ## Features
 
 - **Floating Badge** - A subtle glassmorphism badge appears on every page, showing the current site's IP address at a glance.
-- **Dual-Stack DNS** - Resolves both IPv4 and IPv6 addresses automatically.
+- **IPv4 & IPv6** - Shows the address your browser actually connected to, whichever family it used.
 - **Click to Copy** - Click the badge to copy the IP to your clipboard instantly.
 - **Auto-Dodge** - The badge moves out of the way when you hover over it. Configurable delay (0–3 seconds).
 - **Adjustable Opacity** - Slide the badge from fully visible down to 20% transparent.
-- **Light & Dark Theme** - Toggle between light and dark badge themes from the popup.
+- **Light & Dark Theme** - Follows your browser's light or dark setting by default; switch between System, Light and Dark from the popup.
 - **Fullscreen Aware** - The badge automatically hides when you go fullscreen.
 - **Popup Dashboard** - Click the extension icon for a detailed view with quick copy and manual refresh.
-- **Privacy First** - No analytics, no tracking, no external servers. Uses DNS-over-HTTPS (Google Public DNS) only for name resolution.
+- **Privacy First** - No analytics, no tracking. The IP comes from your browser's own connection; a DNS-over-HTTPS lookup (Google Public DNS, Cloudflare as backup) runs only when the browser does not report one.
 
 ## Installation
 
