@@ -25,6 +25,7 @@ if (
       local: {
         get: async () => ({}),
         set: async () => {},
+        remove: async () => {},
       },
     },
     tabs: {
@@ -32,6 +33,51 @@ if (
       sendMessage: async () => {},
     },
   };
+}
+
+// Theme button cycles through these; `light: null` follows the system
+const THEMES = [
+  { light: null, icon: ".icon-system", title: "Theme: System" },
+  { light: true, icon: ".icon-sun", title: "Theme: Light" },
+  { light: false, icon: ".icon-moon", title: "Theme: Dark" },
+];
+const THEME_MIRROR = "lightTheme";
+const systemLight = matchMedia("(prefers-color-scheme: light)");
+
+// chrome.storage answers after the first paint, so the choice is mirrored for a synchronous read
+let lightTheme = readThemeMirror();
+applyTheme();
+systemLight.addEventListener("change", applyTheme);
+
+function readThemeMirror() {
+  try {
+    return JSON.parse(localStorage.getItem(THEME_MIRROR));
+  } catch {
+    return null;
+  }
+}
+
+function writeThemeMirror() {
+  try {
+    localStorage.setItem(THEME_MIRROR, JSON.stringify(lightTheme));
+  } catch {
+    /* the mirror only saves a repaint */
+  }
+}
+
+function applyTheme() {
+  const themeBtn = document.getElementById("theme-btn");
+  const current = THEMES.find((theme) => theme.light === lightTheme);
+  for (const theme of THEMES) {
+    themeBtn
+      .querySelector(theme.icon)
+      .classList.toggle("hidden", theme !== current);
+  }
+  themeBtn.title = current.title;
+  document.body.classList.toggle(
+    "light-theme",
+    lightTheme ?? systemLight.matches,
+  );
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -59,7 +105,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let currentUrl = "";
   let currentIP = null;
-  let isLightTheme = false;
 
   // Display version
   const manifest = chrome.runtime.getManifest();
@@ -80,8 +125,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   elements.toggleInput.checked = stored.enabled !== false;
   elements.badgeIcon.checked = stored.badgeIcon !== false;
   elements.badgeTag.checked = stored.badgeTag !== false;
-  isLightTheme = stored.lightTheme === true;
-  updateThemeIcon(isLightTheme);
+  lightTheme = stored.lightTheme ?? null;
+  applyTheme();
+  writeThemeMirror();
 
   const savedDelay = stored.hoverDelay ?? 1.5;
   elements.hoverDelay.value = savedDelay;
@@ -116,12 +162,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  // Theme toggle
+  // Theme: system → light → dark; badges follow through storage.onChanged
   on(elements.themeBtn, "click", () => {
-    isLightTheme = !isLightTheme;
-    updateThemeIcon(isLightTheme);
-    chrome.storage.local.set({ lightTheme: isLightTheme });
-    notifyBadge({ lightTheme: isLightTheme });
+    const index = THEMES.findIndex((theme) => theme.light === lightTheme);
+    lightTheme = THEMES[(index + 1) % THEMES.length].light;
+    applyTheme();
+    writeThemeMirror();
+    if (lightTheme === null) {
+      chrome.storage.local.remove("lightTheme");
+    } else {
+      chrome.storage.local.set({ lightTheme });
+    }
   });
 
   // Settings panel
@@ -132,16 +183,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Badge icon toggle
   on(elements.badgeIcon, "change", () => {
-    const value = elements.badgeIcon.checked;
-    chrome.storage.local.set({ badgeIcon: value });
-    notifyBadge({ badgeIcon: value });
+    chrome.storage.local.set({ badgeIcon: elements.badgeIcon.checked });
   });
 
   // Badge tag toggle
   on(elements.badgeTag, "change", () => {
-    const value = elements.badgeTag.checked;
-    chrome.storage.local.set({ badgeTag: value });
-    notifyBadge({ badgeTag: value });
+    chrome.storage.local.set({ badgeTag: elements.badgeTag.checked });
   });
 
   // Opacity slider
@@ -151,9 +198,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
   on(elements.badgeOpacity, "change", () => {
-    const value = parseInt(elements.badgeOpacity.value, 10);
-    chrome.storage.local.set({ badgeOpacity: value });
-    notifyBadge({ badgeOpacity: value });
+    chrome.storage.local.set({
+      badgeOpacity: parseInt(elements.badgeOpacity.value, 10),
+    });
   });
 
   // Auto-dodge slider
@@ -163,9 +210,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
   on(elements.hoverDelay, "change", () => {
-    const value = parseFloat(elements.hoverDelay.value);
-    chrome.storage.local.set({ hoverDelay: value });
-    notifyBadge({ hoverDelay: value });
+    chrome.storage.local.set({
+      hoverDelay: parseFloat(elements.hoverDelay.value),
+    });
   });
 
   // Refresh
@@ -189,11 +236,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!currentIP) return;
     navigator.clipboard.writeText(currentIP).then(() => {
       elements.ipCard.classList.add("copied");
-      const previous = elements.ipValue.textContent;
       elements.ipValue.textContent = "Copied!";
       setTimeout(() => {
         elements.ipCard.classList.remove("copied");
-        elements.ipValue.textContent = previous;
+        // Restore from state: a second click would read "Copied!" back as the IP
+        if (currentIP) elements.ipValue.textContent = currentIP;
       }, 1000);
     });
   });
@@ -220,31 +267,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       elements.ipValue.textContent = "Unavailable";
       elements.ipTag.textContent = "";
       elements.ipCard.classList.add("unavailable");
-    }
-  }
-
-  function updateThemeIcon(isLight) {
-    const moonIcon = elements.themeBtn.querySelector(".icon-moon");
-    const sunIcon = elements.themeBtn.querySelector(".icon-sun");
-    moonIcon.classList.toggle("hidden", isLight);
-    sunIcon.classList.toggle("hidden", !isLight);
-    document.body.classList.toggle("light-theme", isLight);
-  }
-
-  async function notifyBadge(settings) {
-    const [activeTab] = await chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
-    if (!activeTab?.id) return;
-
-    try {
-      await chrome.tabs.sendMessage(activeTab.id, {
-        type: "UPDATE_BADGE_DISPLAY",
-        ...settings,
-      });
-    } catch {
-      /* content script may not be loaded */
     }
   }
 });

@@ -1,15 +1,13 @@
 /**
  * This IP - Background Service Worker
- * Resolves IP addresses for active tabs using DNS API and fallback methods.
+ * Reports the IP the browser connected to; falls back to DNS when it is unknown.
  */
 
 const REFRESH_ALARM = "refresh-ip";
 const REFRESH_INTERVAL_MINUTES = 1;
-const IP_CACHE = new Map();
 
 // Initialization
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.set({ enabled: true });
   chrome.alarms.create(REFRESH_ALARM, {
     periodInMinutes: REFRESH_INTERVAL_MINUTES,
   });
@@ -26,15 +24,13 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name !== REFRESH_ALARM) return;
 
   const { enabled } = await chrome.storage.local.get("enabled");
-  if (!enabled) return;
+  if (enabled === false) return;
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (tab?.url) {
     const hostname = getHostname(tab.url);
     if (hostname) {
-      const result = await resolveIP(hostname);
-      IP_CACHE.set(hostname, result);
-      notifyContentScript(tab.id, result);
+      notifyContentScript(tab.id, await resolveIP(hostname));
     }
   }
 });
@@ -44,19 +40,17 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status !== "complete" || !tab.url) return;
 
   const { enabled } = await chrome.storage.local.get("enabled");
-  if (!enabled) return;
+  if (enabled === false) return;
 
   const hostname = getHostname(tab.url);
   if (!hostname) return;
 
-  const result = await resolveIP(hostname);
-  IP_CACHE.set(hostname, result);
-  notifyContentScript(tabId, result);
+  notifyContentScript(tabId, await resolveIP(hostname));
 });
 
 chrome.tabs.onActivated.addListener(async ({ tabId }) => {
   const { enabled } = await chrome.storage.local.get("enabled");
-  if (!enabled) return;
+  if (enabled === false) return;
 
   const tab = await chrome.tabs.get(tabId);
   if (!tab.url) return;
@@ -64,33 +58,23 @@ chrome.tabs.onActivated.addListener(async ({ tabId }) => {
   const hostname = getHostname(tab.url);
   if (!hostname) return;
 
-  // Use cache if fresh, otherwise resolve
-  if (IP_CACHE.has(hostname)) {
-    notifyContentScript(tabId, IP_CACHE.get(hostname));
-  } else {
-    const result = await resolveIP(hostname);
-    IP_CACHE.set(hostname, result);
-    notifyContentScript(tabId, result);
-  }
+  notifyContentScript(tabId, await lookupIP(hostname));
 });
 
-// Capture actual IP from browser's network requests (solves local DNS)
+// The browser's own connection is the source of truth (local DNS, hosts file, VPN)
 chrome.webRequest.onResponseStarted.addListener(
   (details) => {
-    if (details.type === "main_frame" && details.ip) {
-      const hostname = getHostname(details.url);
-      if (hostname) {
-        const result = IP_CACHE.get(hostname) || {
-          ipv4: null,
-          ipv6: null,
-          hostname,
-        };
-        categorizeIP(details.ip, result);
-        IP_CACHE.set(hostname, result);
-      }
-    }
+    // Firefox flags proxied requests; their ip belongs to the proxy
+    if (!details.ip || details.proxyInfo) return;
+
+    const hostname = getHostname(details.url);
+    if (!hostname) return;
+
+    const result = { ipv4: null, ipv6: null, hostname, connected: true };
+    categorizeIP(details.ip, result);
+    setCached(result);
   },
-  { urls: ["<all_urls>"] },
+  { urls: ["<all_urls>"], types: ["main_frame"] },
 );
 
 // Message handler
@@ -116,32 +100,14 @@ async function handleGetIP(url) {
   if (!hostname)
     return { ipv4: null, ipv6: null, hostname: null, error: "Invalid URL" };
 
-  if (IP_CACHE.has(hostname)) {
-    return IP_CACHE.get(hostname);
-  }
-
-  const result = await resolveIP(hostname);
-  IP_CACHE.set(hostname, result);
-  return result;
+  return lookupIP(hostname);
 }
 
 async function handleToggle(enabled) {
+  // Content scripts follow this key through storage.onChanged
   await chrome.storage.local.set({ enabled });
 
-  if (!enabled) {
-    // Notify all tabs to hide the badge
-    const tabs = await chrome.tabs.query({});
-    for (const tab of tabs) {
-      try {
-        await chrome.tabs.sendMessage(tab.id, {
-          type: "TOGGLE_BADGE",
-          enabled: false,
-        });
-      } catch {
-        /* tab may not have content script */
-      }
-    }
-  } else {
+  if (enabled) {
     // Re-resolve for the active tab
     const [tab] = await chrome.tabs.query({
       active: true,
@@ -150,9 +116,7 @@ async function handleToggle(enabled) {
     if (tab?.url) {
       const hostname = getHostname(tab.url);
       if (hostname) {
-        const result = await resolveIP(hostname);
-        IP_CACHE.set(hostname, result);
-        notifyContentScript(tab.id, result);
+        notifyContentScript(tab.id, await resolveIP(hostname));
       }
     }
   }
@@ -165,7 +129,6 @@ async function handleRefresh(url) {
   if (!hostname) return { ipv4: null, ipv6: null, hostname: null };
 
   const result = await resolveIP(hostname);
-  IP_CACHE.set(hostname, result);
 
   // Also notify the active tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -176,9 +139,31 @@ async function handleRefresh(url) {
   return result;
 }
 
-// DNS Resolution
+// Session storage outlives service-worker restarts and is dropped when the browser closes
+// Connection and DNS results use separate keys, so a DNS write can never replace a connection
+// ponytail: entries per hostname until restart (10 MB quota), evict if that ever fills
+async function getCached(hostname) {
+  const [conn, dns] = [`conn:${hostname}`, `dns:${hostname}`];
+  const stored = await chrome.storage.session.get([conn, dns]);
+  return stored[conn] ?? stored[dns];
+}
+
+function setCached(result) {
+  const kind = result.connected ? "conn" : "dns";
+  return chrome.storage.session.set({ [`${kind}:${result.hostname}`]: result });
+}
+
+// Cached answer when there is one, a fresh lookup otherwise
+async function lookupIP(hostname) {
+  return (await getCached(hostname)) ?? resolveIP(hostname);
+}
+
+// Fresh lookup: the browser's connection first, DNS only when it is unknown
 async function resolveIP(hostname) {
   const result = { ipv4: null, ipv6: null, hostname };
+
+  const cached = await getCached(hostname);
+  if (cached?.connected) return cached;
 
   // Short-circuit if hostname is already an IP address or localhost
   if (hostname === "localhost") {
@@ -195,42 +180,16 @@ async function resolveIP(hostname) {
     return result;
   }
 
-  try {
-    // Try chrome.dns API first
-    if (chrome.dns && chrome.dns.resolve) {
-      const dnsResult = await chrome.dns.resolve(hostname);
-      if (dnsResult?.address) {
-        categorizeIP(dnsResult.address, result);
-      }
-    }
-  } catch {
-    /* fallback below */
-  }
+  // No connection on record: ask public DNS-over-HTTPS
+  await resolveViaDOH(hostname, result);
 
-  // Fallback: use public DNS-over-HTTPS to get both IPv4 and IPv6
-  if (!result.ipv4 && !result.ipv6) {
-    await resolveViaDOH(hostname, result);
-  }
+  if (result.ipv4 || result.ipv6) await setCached(result);
 
-  // If we only have one type, try to get the other
-  if (result.ipv4 && !result.ipv6) {
-    await resolveViaDOH(hostname, result, "AAAA");
-  } else if (!result.ipv4 && result.ipv6) {
-    await resolveViaDOH(hostname, result, "A");
-  }
-
-  // Use cached IP from webRequest if DNS resolution failed (e.g. local networks)
-  const cached = IP_CACHE.get(hostname);
-  if (cached) {
-    if (!result.ipv4 && cached.ipv4) result.ipv4 = cached.ipv4;
-    if (!result.ipv6 && cached.ipv6) result.ipv6 = cached.ipv6;
-  }
-
-  return result;
+  // Prefer a connection a page load reported meanwhile; an empty answer keeps the earlier one
+  return (await getCached(hostname)) ?? result;
 }
 
-async function resolveViaDOH(hostname, result, type) {
-  const types = type ? [type] : ["A", "AAAA"];
+async function resolveViaDOH(hostname, result) {
   const endpoints = [
     {
       url: (name, t) => `https://dns.google/resolve?name=${name}&type=${t}`,
@@ -243,36 +202,38 @@ async function resolveViaDOH(hostname, result, type) {
     },
   ];
 
-  for (const t of types) {
-    for (const endpoint of endpoints) {
-      try {
-        const resp = await fetch(
-          endpoint.url(encodeURIComponent(hostname), t),
-          {
-            headers: endpoint.headers,
-            signal: AbortSignal.timeout(3000),
-          },
-        );
+  await Promise.all(
+    ["A", "AAAA"].map(async (t) => {
+      for (const endpoint of endpoints) {
+        try {
+          const resp = await fetch(
+            endpoint.url(encodeURIComponent(hostname), t),
+            {
+              headers: endpoint.headers,
+              signal: AbortSignal.timeout(3000),
+            },
+          );
 
-        if (!resp.ok) continue;
+          if (!resp.ok) continue;
 
-        const data = await resp.json();
+          const data = await resp.json();
 
-        if (data.Answer) {
-          for (const answer of data.Answer) {
-            if (answer.data) {
-              categorizeIP(answer.data, result);
+          if (data.Answer) {
+            for (const answer of data.Answer) {
+              if (answer.data) {
+                categorizeIP(answer.data, result);
+              }
             }
           }
-        }
 
-        // If the request was successful, don't try the fallback provider for this record type
-        break;
-      } catch {
-        /* silent, try next provider */
+          // If the request was successful, don't try the fallback provider for this record type
+          break;
+        } catch {
+          /* silent, try next provider */
+        }
       }
-    }
-  }
+    }),
+  );
 }
 
 function categorizeIP(ip, result) {

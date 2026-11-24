@@ -9,24 +9,45 @@
   let badge = null;
   let currentData = null;
   let position = "bottom-right";
-  let showIcon = true;
-  let showTag = true;
-  let lightTheme = false;
-  let hoverDelay = 1.5;
-  let hoverTimer = 0.5;
-  let badgeOpacity = 100;
+  let hoverTimer = null;
+  const systemLight = window.matchMedia("(prefers-color-scheme: light)");
 
-  // Load display preferences
-  chrome.storage.local.get(
-    ["badgeIcon", "badgeTag", "lightTheme", "hoverDelay", "badgeOpacity"],
-    (result) => {
-      showIcon = result.badgeIcon !== false;
-      showTag = result.badgeTag !== false;
-      lightTheme = result.lightTheme === true;
-      hoverDelay = result.hoverDelay ?? 1.5;
-      badgeOpacity = result.badgeOpacity ?? 100;
-    },
-  );
+  // Stored preferences with their defaults; lightTheme null follows the system
+  const DEFAULTS = {
+    enabled: true,
+    badgeIcon: true,
+    badgeTag: true,
+    lightTheme: null,
+    hoverDelay: 1.5,
+    badgeOpacity: 100,
+  };
+  const prefs = { ...DEFAULTS };
+
+  // Load preferences first so the first render already uses them
+  chrome.storage.local.get(DEFAULTS, (stored) => {
+    Object.assign(prefs, stored);
+    // Listening any earlier would let a pushed result render with default preferences
+    chrome.runtime.onMessage.addListener(handleMessage);
+    if (prefs.enabled) requestIP();
+  });
+
+  // The popup only writes to storage; every open tab picks the change up here
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== "local") return;
+    for (const [key, { newValue }] of Object.entries(changes)) {
+      prefs[key] = newValue ?? DEFAULTS[key];
+    }
+    applyTheme();
+    applyOpacity();
+    if (currentData) {
+      updateBadge(currentData);
+    } else if (changes.enabled && prefs.enabled) {
+      // Loaded while disabled: nothing to show yet
+      requestIP();
+    }
+  });
+
+  systemLight.addEventListener("change", applyTheme);
 
   // Create badge element
   function createBadge() {
@@ -40,7 +61,7 @@
 
     document.documentElement.appendChild(badge);
     badge.classList.add(position);
-    if (lightTheme) badge.classList.add("light-theme");
+    applyTheme();
     applyOpacity();
 
     // Click handler — copy only, no position toggle
@@ -57,17 +78,22 @@
     badge.addEventListener("mouseleave", handleBadgeHoverEnd);
 
     // Fullscreen change — hide/show badge
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("fullscreenchange", syncVisibility);
+    document.addEventListener("webkitfullscreenchange", syncVisibility);
   }
 
   function handleBadgeClick() {
     // Copy IP to clipboard only — no position toggle
     const ip = currentData?.ipv4 || currentData?.ipv6;
     if (ip) {
-      navigator.clipboard.writeText(ip).catch(() => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(ip).catch(() => {
+          fallbackCopy(ip);
+        });
+      } else {
+        // Insecure (http) pages have no navigator.clipboard
         fallbackCopy(ip);
-      });
+      }
     }
 
     // Cancel any pending hover switch so click doesn't trigger it
@@ -75,7 +101,7 @@
   }
 
   function handleBadgeHoverStart() {
-    if (hoverDelay === 0) {
+    if (prefs.hoverDelay === 0) {
       // Instant dodge
       togglePosition();
       return;
@@ -83,7 +109,7 @@
     hoverTimer = setTimeout(() => {
       togglePosition();
       hoverTimer = null;
-    }, hoverDelay * 1000);
+    }, prefs.hoverDelay * 1000);
   }
 
   function handleBadgeHoverEnd() {
@@ -104,13 +130,14 @@
     badge.classList.add(position);
   }
 
-  function handleFullscreenChange() {
+  function syncVisibility() {
     if (!badge) return;
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-      badge.classList.remove("visible");
-    } else if (currentData) {
-      badge.classList.add("visible");
-    }
+    const fullscreen =
+      document.fullscreenElement || document.webkitFullscreenElement;
+    badge.classList.toggle(
+      "visible",
+      prefs.enabled && !!currentData && !fullscreen,
+    );
   }
 
   function fallbackCopy(text) {
@@ -136,7 +163,7 @@
     const content = document.createElement("span");
     content.className = "thisip-content";
 
-    if (showIcon) {
+    if (prefs.badgeIcon) {
       const icon = document.createElement("span");
       icon.className = "thisip-icon";
       icon.textContent = "⬡";
@@ -148,7 +175,7 @@
     ipText.textContent = ip;
     content.appendChild(ipText);
 
-    if (showTag && typeLabel) {
+    if (prefs.badgeTag && typeLabel) {
       const tag = document.createElement("span");
       tag.className = "thisip-tag";
       tag.textContent = typeLabel;
@@ -159,74 +186,39 @@
     badge.textContent = "";
     badge.appendChild(content);
 
-    // Don't show if in fullscreen
-    if (document.fullscreenElement || document.webkitFullscreenElement) return;
-
-    badge.classList.add("visible");
+    syncVisibility();
   }
 
-  function hideBadge() {
-    if (badge) {
-      badge.classList.remove("visible");
-    }
+  function applyTheme() {
+    badge?.classList.toggle(
+      "light-theme",
+      prefs.lightTheme ?? systemLight.matches,
+    );
   }
 
-  function applyTheme(isLight) {
-    lightTheme = isLight;
-    if (badge) {
-      badge.classList.toggle("light-theme", isLight);
-      applyOpacity();
-    }
-  }
-
+  // content.css multiplies each theme's background alpha by this
   function applyOpacity() {
-    if (!badge) return;
-    const alpha = badgeOpacity / 100;
-    if (lightTheme) {
-      badge.style.setProperty("--badge-bg-alpha", alpha);
-      badge.style.background = `rgba(255, 255, 255, ${0.88 * alpha})`;
-    } else {
-      badge.style.setProperty("--badge-bg-alpha", alpha);
-      badge.style.background = `rgba(15, 15, 20, ${0.82 * alpha})`;
-    }
+    badge?.style.setProperty("--badge-bg-alpha", prefs.badgeOpacity / 100);
   }
 
-  // Message listener
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  function handleMessage(message, sender, sendResponse) {
     if (message.type === "IP_RESOLVED") {
-      updateBadge(message.data);
-      sendResponse({ received: true });
-    }
-
-    if (message.type === "TOGGLE_BADGE") {
-      if (message.enabled === false) {
-        hideBadge();
-      } else if (currentData) {
-        updateBadge(currentData);
+      // A slow lookup can land after the tab moved to another site
+      if (message.data?.hostname === window.location.hostname) {
+        updateBadge(message.data);
       }
       sendResponse({ received: true });
     }
-
-    if (message.type === "UPDATE_BADGE_DISPLAY") {
-      if (message.badgeIcon !== undefined) showIcon = message.badgeIcon;
-      if (message.badgeTag !== undefined) showTag = message.badgeTag;
-      if (message.lightTheme !== undefined) applyTheme(message.lightTheme);
-      if (message.hoverDelay !== undefined) hoverDelay = message.hoverDelay;
-      if (message.badgeOpacity !== undefined) {
-        badgeOpacity = message.badgeOpacity;
-        applyOpacity();
-      }
-      if (currentData) updateBadge(currentData);
-      sendResponse({ received: true });
-    }
-  });
+  }
 
   // Initial request
-  chrome.runtime.sendMessage(
-    { type: "GET_IP", url: window.location.href },
-    (response) => {
-      if (chrome.runtime.lastError) return;
-      if (response) updateBadge(response);
-    },
-  );
+  function requestIP() {
+    chrome.runtime.sendMessage(
+      { type: "GET_IP", url: window.location.href },
+      (response) => {
+        if (chrome.runtime.lastError) return;
+        if (response) updateBadge(response);
+      },
+    );
+  }
 })();
